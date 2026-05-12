@@ -10,10 +10,7 @@ interface ResultDisplayProps {
   onReset: () => void;
 }
 
-type TabType = 'analysis' | 'standards';
-
 export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('analysis');
   const info = INCOTERMS[code];
 
   if (!info) return null;
@@ -51,45 +48,25 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
           </div>
         </div>
 
-        {/* Dynamic Tab Selector */}
-        <div className="bg-slate-50 border-b border-slate-200 px-10 flex gap-8">
-          {[
-            { id: 'analysis', label: 'Strategic Analysis', icon: BarChart3 },
-            { id: 'standards', label: 'Technical Standards', icon: Binary }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as TabType)}
-              className={`flex items-center gap-2.5 py-6 text-sm font-black uppercase tracking-widest relative transition-all ${
-                activeTab === tab.id ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'
-              }`}
-            >
-              <tab.icon size={16} />
-              {tab.label}
-              {activeTab === tab.id && (
-                <motion.div 
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-slate-900 rounded-t-full"
-                />
-              )}
-            </button>
-          ))}
+        {/* Dynamic Nav Header */}
+        <div className="bg-slate-50 border-b border-slate-200 px-10 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="text-slate-400" size={18} />
+            <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Comprehensive Analysis</h2>
+          </div>
+          <div className="flex gap-2">
+            <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-200">
+              Incoterms® 2020
+            </div>
+          </div>
         </div>
 
         <div className="p-10 grid lg:grid-cols-12 gap-10">
           {/* Content Area */}
           <div className="lg:col-span-8">
-            <AnimatePresence mode="wait">
-              {activeTab === 'analysis' ? (
-                <motion.div
-                  key="analysis"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  className="space-y-10"
-                >
-                  {/* Strategic Risk Transfer Bar */}
-                  <section className="bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-sm space-y-12">
+            <div className="space-y-12">
+              {/* Strategic Risk Transfer Bar */}
+              <section className="bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-sm space-y-12">
                     <div className="flex justify-between items-center">
                       <h3 className="flex items-center gap-3 text-slate-900 font-black text-2xl">
                         <Shield className="text-emerald-600" size={28} />
@@ -256,20 +233,23 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                       </div>
                     </div>
                   </section>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="standards"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  className="space-y-10"
-                >
-                  <LegalCompliance initialTerm={code} showSelector={false} showBibliography={true} />
-                </motion.div>
-              )}
-            </AnimatePresence>
 
+                  {/* Institutional Standards Section */}
+                  <section className="bg-white border border-slate-100 rounded-[2.5rem] p-1 shadow-sm overflow-hidden">
+                    <div className="bg-slate-50 p-8 border-b border-slate-100">
+                       <h3 className="flex items-center gap-3 text-slate-900 font-black text-2xl">
+                        <Binary className="text-blue-600" size={28} />
+                        Documentary Compliance
+                      </h3>
+                      <p className="text-slate-500 text-sm mt-1 font-medium italic">
+                        Technical documentation mapped against Incoterms® 2020 rules, UCP 600, and ISBP 745.
+                      </p>
+                    </div>
+                    <div className="p-8">
+                      <LegalCompliance initialTerm={code} showSelector={false} showBibliography={true} />
+                    </div>
+                  </section>
+                </div>
             {/* Risk Disclaimer - Global footer for result */}
             <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 italic text-slate-500 text-xs mt-8">
               Based on International Chamber of Commerce (ICC) Incoterms® 2020 rules. This analysis is for informational purposes only.

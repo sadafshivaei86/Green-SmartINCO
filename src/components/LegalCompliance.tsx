@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FileText, Shield, Info, CheckCircle2, AlertTriangle, ChevronDown, ChevronUp, BookOpen } from 'lucide-react';
+import { FileText, Shield, Info, CheckCircle2, AlertTriangle, ChevronDown, ChevronUp, BookOpen, User, Gavel, Landmark, StickyNote } from 'lucide-react';
 import { LEGAL_DATA, type LegalDoc, type LegalRef } from '../data/legalFramework';
 
 interface LegalComplianceProps {
@@ -11,41 +11,41 @@ interface LegalComplianceProps {
 
 export default function LegalCompliance({ 
   initialTerm = 'FCA', 
-  showSelector = false, 
-  showBibliography = false 
+  showSelector = true,
+  showBibliography = false
 }: LegalComplianceProps) {
   const [selectedTerm, setSelectedTerm] = useState(initialTerm);
   const [expandedDoc, setExpandedDoc] = useState<string | null>(null);
 
   const termData = LEGAL_DATA[selectedTerm] || LEGAL_DATA['EXW'];
-  const terms = Object.keys(LEGAL_DATA);
+  const terms = ['EXW', 'FCA', 'CPT', 'CIP', 'DAP', 'DPU', 'DDP', 'FAS', 'FOB', 'CFR', 'CIF'];
 
   const renderBadge = (ref: LegalRef) => {
     let colorClass = 'bg-slate-100 text-slate-500';
-    if (ref.source === 'Incoterms 2020') colorClass = 'bg-blue-50 text-blue-600 border border-blue-100';
-    if (ref.source === 'UCP 600') colorClass = 'bg-amber-50 text-amber-600 border border-amber-100';
-    if (ref.source === 'ISBP 745') colorClass = 'bg-emerald-50 text-emerald-600 border border-emerald-100';
+    if (ref.source === 'Incoterms 2020') colorClass = 'bg-blue-100 text-blue-700';
+    if (ref.source === 'UCP 600') colorClass = 'bg-amber-100 text-amber-700';
+    if (ref.source === 'ISBP 745') colorClass = 'bg-emerald-100 text-emerald-700';
 
     return (
-      <span key={`${ref.source}-${ref.article}`} className={`px-2 py-0.5 rounded-md font-mono text-[9px] font-bold ${colorClass}`}>
-        {ref.source} · {ref.article}
+      <span key={`${ref.source}-${ref.article}`} className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold leading-none ${colorClass}`}>
+        [{ref.source} · {ref.article}]
       </span>
     );
   };
 
-  const DocRow = ({ doc }: { doc: LegalDoc; key?: string }) => {
+  const DocRow = ({ doc }: { doc: LegalDoc, key?: React.Key }) => {
     const isExpanded = expandedDoc === doc.name;
     return (
-      <div className="border-b border-slate-50 last:border-0">
+      <div className="border-b border-slate-100 last:border-0">
         <button
           onClick={() => setExpandedDoc(isExpanded ? null : doc.name)}
-          className="w-full p-4 flex flex-col gap-2 text-left hover:bg-slate-50/50 transition-colors group"
+          className="w-full p-4 flex flex-col gap-1 text-left hover:bg-slate-50 transition-colors group"
         >
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start gap-4">
             <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-slate-800">{doc.name}</span>
-                <div className="flex gap-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm font-bold text-slate-900">{doc.name}</span>
+                <div className="flex flex-wrap gap-1">
                   {doc.refs.map(renderBadge)}
                 </div>
               </div>
@@ -53,7 +53,7 @@ export default function LegalCompliance({
                 {doc.description}
               </p>
             </div>
-            {isExpanded ? <ChevronUp size={16} className="text-slate-300" /> : <ChevronDown size={16} className="text-slate-300 group-hover:text-slate-400" />}
+            {isExpanded ? <ChevronUp size={16} className="text-slate-400 mt-1" /> : <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-600 mt-1" />}
           </div>
         </button>
 
@@ -63,38 +63,45 @@ export default function LegalCompliance({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden bg-slate-50/80"
+              className="overflow-hidden bg-slate-50/50"
             >
-              <div className="p-5 space-y-4 border-t border-slate-100">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-1">
-                    <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Legal Basis</span>
-                    <p className="text-xs font-bold text-slate-700">{doc.legalBasis}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Letter of Credit</span>
-                    <div className="flex items-center gap-2">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${doc.isLCRequired ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-600'}`}>
-                        {doc.isLCRequired ? 'Required for Presentation' : 'Optional / Non-standard'}
-                      </span>
+              <div className="p-4 space-y-4 border-t border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex items-start gap-2">
+                    <User size={14} className="text-slate-400 mt-0.5" />
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Prepped By</span>
+                      <p className="text-xs font-bold text-slate-700">{doc.whoPrepares}</p>
                     </div>
                   </div>
-                </div>
-
-                {doc.bankingRequirement && (
-                  <div className="space-y-1">
-                    <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Banking Requirement</span>
-                    <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                      {doc.bankingRequirement}
-                    </p>
+                  <div className="flex items-start gap-2">
+                    <Gavel size={14} className="text-slate-400 mt-0.5" />
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Legal Basis</span>
+                      <p className="text-xs font-bold text-slate-700">{doc.legalBasis}</p>
+                    </div>
                   </div>
-                )}
-
-                <div className="p-3 bg-white border border-slate-200 rounded-xl">
-                  <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1 block">Practical Note</span>
-                  <p className="text-[11px] text-slate-600 font-medium leading-relaxed italic">
-                    {doc.practicalNote}
-                  </p>
+                  <div className="flex items-start gap-2">
+                    <Landmark size={14} className="text-slate-400 mt-0.5" />
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Banking Requirement</span>
+                      <div className="space-y-1">
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded inline-block ${doc.isLCRequired ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-600'}`}>
+                          {doc.isLCRequired ? 'Required for LC Presentation' : 'Not Mandatory for LC'}
+                        </span>
+                        {doc.bankingRequirement && (
+                          <p className="text-[11px] text-slate-600 leading-tight mt-1">{doc.bankingRequirement}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <StickyNote size={14} className="text-slate-400 mt-0.5" />
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Practical Note</span>
+                      <p className="text-[11px] text-slate-600 italic leading-relaxed">{doc.practicalNote}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -105,12 +112,12 @@ export default function LegalCompliance({
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* Term Selector */}
       {showSelector && (
-        <div className="space-y-4">
-          <div className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Jurisdictional Term Selector</div>
-          <div className="flex flex-wrap gap-2">
+        <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+          <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 text-center">Incoterms® 2020 Term Selection</div>
+          <div className="flex flex-wrap justify-center gap-2">
             {terms.map(term => (
               <button
                 key={term}
@@ -118,9 +125,9 @@ export default function LegalCompliance({
                   setSelectedTerm(term);
                   setExpandedDoc(null);
                 }}
-                className={`px-4 py-2 rounded-lg text-xs font-black transition-all border ${
+                className={`px-4 py-2 rounded-full text-xs font-black transition-all border ${
                   selectedTerm === term 
-                    ? 'bg-slate-900 border-slate-900 text-white shadow-lg' 
+                    ? 'bg-blue-600 border-blue-600 text-white shadow-lg' 
                     : 'bg-white border-slate-100 text-slate-500 hover:border-slate-300'
                 }`}
               >
@@ -135,90 +142,86 @@ export default function LegalCompliance({
       <AnimatePresence>
         {termData.isSeaOnly && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center gap-4"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-4 bg-amber-50 border border-amber-100 rounded-2xl flex items-center gap-4 text-amber-800"
           >
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-              <Shield size={20} />
-            </div>
+            <AlertTriangle size={24} className="flex-shrink-0" />
             <div className="space-y-0.5">
-              <div className="text-[10px] font-black uppercase tracking-widest text-blue-800">Maritime Directive</div>
-              <p className="text-xs text-blue-700 font-bold">This term is strictly for Sea and Inland Waterway transport only.</p>
+              <span className="text-[10px] font-black uppercase tracking-widest leading-none">Maritime Advisory</span>
+              <p className="text-xs font-bold leading-tight">Sea & inland waterway transport only. Avoid for multimodal or air freight.</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Document Table */}
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-2 gap-6">
         {/* Seller Column */}
-        <div className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden shadow-sm">
+        <div className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden shadow-sm h-fit">
           <div className="bg-[#0C447C] p-4 text-white">
-            <div className="text-[10px] font-black uppercase tracking-widest opacity-70">A1 — A10 Responsibilities</div>
+            <div className="text-[10px] font-black uppercase tracking-widest opacity-70">Rules A1–A10</div>
             <h4 className="text-sm font-black uppercase tracking-widest">Seller's Documents</h4>
           </div>
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-100">
             {termData.sellerDocs.map(doc => <DocRow key={doc.name} doc={doc} />)}
           </div>
         </div>
 
         {/* Buyer Column */}
-        <div className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden shadow-sm">
+        <div className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden shadow-sm h-fit">
           <div className="bg-[#791F1F] p-4 text-white">
-            <div className="text-[10px] font-black uppercase tracking-widest opacity-70">B1 — B10 Responsibilities</div>
+            <div className="text-[10px] font-black uppercase tracking-widest opacity-70">Rules B1–B10</div>
             <h4 className="text-sm font-black uppercase tracking-widest">Buyer's Documents</h4>
           </div>
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-100">
             {termData.buyerDocs.map(doc => <DocRow key={doc.name} doc={doc} />)}
           </div>
         </div>
       </div>
 
       {/* Guidance Note */}
-      <div className="p-6 bg-slate-900 rounded-[2.5rem] relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-6 opacity-10 rotate-12 group-hover:rotate-0 transition-transform">
-          <BookOpen size={100} className="text-white" />
-        </div>
-        <div className="relative z-10 space-y-4">
-          <div className="flex items-center gap-3">
-            <Info className="text-emerald-500" size={20} />
-            <span className="text-xs font-black uppercase text-emerald-500 tracking-widest">ICC Guidance Note</span>
+      <div className="p-6 bg-slate-900 rounded-[2rem] relative overflow-hidden group">
+        <div className="relative z-10 space-y-3">
+          <div className="flex items-center gap-2">
+            <Info className="text-blue-400" size={18} />
+            <span className="text-xs font-black uppercase text-blue-400 tracking-widest">Incoterms® 2020 · {selectedTerm} Guidance</span>
           </div>
-          <p className="text-sm text-slate-300 font-medium leading-relaxed max-w-2xl">
+          <p className="text-sm text-slate-300 font-medium leading-relaxed italic">
             {termData.note}
           </p>
         </div>
       </div>
 
       {/* Reference Legend */}
-      <div className="pt-10 border-t border-slate-100">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="space-y-3">
+      <div className="pt-8 border-t border-slate-200">
+        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 text-center">Global Trade Reference Framework</h4>
+        <div className="grid sm:grid-cols-3 gap-6">
+          <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100 space-y-2">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-blue-500" />
-              <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-900">Incoterms® 2020</h5>
+              <div className="w-2 h-2 rounded-full bg-blue-600" />
+              <span className="text-[10px] font-black text-blue-800 uppercase tracking-widest">Incoterms® 2020</span>
             </div>
-            <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
-              ICC (2020), Article A1–A10 / B1–B10 structure defining precise risk and cost transfer points.
+            <p className="text-[10px] text-blue-700/70 font-medium leading-relaxed">
+              International Chamber of Commerce (ICC). Rules for the Use of Domestic and International Trade Terms. Articles A1–A10 / B1–B10.
             </p>
           </div>
-          <div className="space-y-3">
+          <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 space-y-2">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-amber-500" />
-              <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-900">UCP 600</h5>
+              <div className="w-2 h-2 rounded-full bg-amber-600" />
+              <span className="text-[10px] font-black text-amber-800 uppercase tracking-widest">UCP 600 (2007)</span>
             </div>
-            <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
-              ICC (2007), Articles 14–28. International standard for documentary credits and bank examination.
+            <p className="text-[10px] text-amber-700/70 font-medium leading-relaxed">
+              Uniform Customs and Practice for Documentary Credits. ICC Pub No. 600. Articles 14–28 governing document compliance.
             </p>
           </div>
-          <div className="space-y-3">
+          <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 space-y-2">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-emerald-500" />
-              <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-900">ISBP 745</h5>
+              <div className="w-2 h-2 rounded-full bg-emerald-600" />
+              <span className="text-[10px] font-black text-emerald-800 uppercase tracking-widest">ISBP 745 (2013)</span>
             </div>
-            <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
-              ICC (2013), document-specific paragraphs providing granular guidance on data entry and signatures.
+            <p className="text-[10px] text-emerald-700/70 font-medium leading-relaxed">
+              International Standard Banking Practice. ICC Pub No. 745. Granular paragraph guidance for LC document examination.
             </p>
           </div>
         </div>
@@ -226,7 +229,7 @@ export default function LegalCompliance({
 
       {/* Final References Citation Section */}
       {showBibliography && (
-        <section className="bg-slate-50 rounded-[3rem] p-10 md:p-16 space-y-12">
+        <section className="bg-slate-50 rounded-[3rem] p-10 md:p-16 space-y-12 mt-12">
           <div className="space-y-4 text-center">
               <div className="inline-block px-4 py-1.5 bg-white rounded-full border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-400">Legal Documentation Bibliography</div>
               <h3 className="text-3xl font-black text-slate-900 tracking-tighter">Academic & Global <span className="text-slate-400">Standards</span></h3>
@@ -255,16 +258,16 @@ export default function LegalCompliance({
                    {ref.id}
                  </div>
                  <div className="space-y-3">
-                   <p className="text-sm text-slate-700 font-bold leading-relaxed">{ref.citation}</p>
-                   <div className="space-y-1">
-                     {ref.notes.map((note, i) => (
-                       <div key={i} className="flex items-center gap-2 text-slate-500">
-                         <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                         <span className="text-xs font-medium">{note}</span>
-                       </div>
-                     ))}
-                   </div>
-                 </div>
+                    <p className="text-sm text-slate-700 font-bold leading-relaxed">{ref.citation}</p>
+                    <div className="space-y-1">
+                      {ref.notes.map((note, i) => (
+                        <div key={i} className="flex items-center gap-2 text-slate-500">
+                          <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                          <span className="text-xs font-medium">{note}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
               </div>
             ))}
           </div>

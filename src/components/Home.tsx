@@ -93,27 +93,16 @@ export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
                   </div>
                </div>
 
-               {/* Quick Standards Reference */}
-               <div id="standards" className="bg-slate-900/40 backdrop-blur-md border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
+               {/* Quick Strategic Preview */}
+               <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
                   <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-4">
                     <FileText className="text-emerald-500" size={20} />
-                    <h3 className="text-white font-bold uppercase tracking-widest text-xs">Technical Standards</h3>
+                    <h3 className="text-white font-bold uppercase tracking-widest text-xs">Technical Scope</h3>
                   </div>
-                  <div className="space-y-3 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
-                    {[
-                      "ICC Incoterms® 2020",
-                      "ICC UCP 600 & ISBP 745",
-                      "Sphera 2025 Scope 3 Report",
-                      "GHG Protocol 2004 Standard",
-                      "EU CSRD Directive 2022/2464/EU",
-                      "Smart Freight Centre (SFC) 2019",
-                      "European Commission (2003/361/EC)"
-                    ].map((ref, i) => (
-                      <div key={i} className="flex gap-3 items-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        <p className="text-[10px] text-slate-300 font-bold tracking-tight uppercase">{ref}</p>
-                      </div>
-                    ))}
+                  <div className="space-y-3">
+                    <p className="text-[10px] text-slate-400 font-bold tracking-tight uppercase leading-relaxed">
+                      Deep integration with ICC Incoterms® 2020, UCP 600, and GHG Protocol standards for global compliance.
+                    </p>
                   </div>
                </div>
              </div>
