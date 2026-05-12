@@ -141,7 +141,7 @@ export default function App() {
                       <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100">
                         Operational Wizard — Analysis {history.length + 1}
                       </div>
-                      <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight max-w-4xl">
+                      <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight max-w-4xl">
                         {currentStep?.question}
                       </h2>
                     </div>

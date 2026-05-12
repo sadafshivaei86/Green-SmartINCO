@@ -11,7 +11,7 @@ export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="relative h-[85vh] flex items-center overflow-hidden bg-slate-900">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-slate-900 py-20 px-6">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1494412519320-aa613dfb7738?auto=format&fit=crop&q=80&w=1920" 
@@ -33,7 +33,7 @@ export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
               <ShieldCheck size={14} />
               Incoterms® 2020 Compliant
             </div>
-            <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9]">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
               Navigate Trade <br />
               <span className="text-emerald-500">Without Risk.</span>
             </h1>
@@ -139,7 +139,7 @@ export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
       <section className="py-32 bg-slate-50 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center space-y-6 max-w-3xl mx-auto mb-24">
-            <h2 className="text-5xl md:text-6xl font-black tracking-tighter text-slate-900 leading flex flex-col">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900 leading-tight flex flex-col">
               Beyond Static Charts.
               <span className="text-emerald-600">Dynamic Intelligence.</span>
             </h2>

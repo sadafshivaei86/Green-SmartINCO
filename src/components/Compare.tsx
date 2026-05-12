@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Truck, Ship, Check, Info, Shield, Leaf, X, PlusCircle } from 'lucide-react';
+import { Truck, Ship, Check, Info, Shield, Leaf, X, PlusCircle, FileText } from 'lucide-react';
 import { INCOTERMS, type IncotermInfo } from '../data/incoterms';
 
 interface CompareProps {
@@ -162,15 +162,45 @@ export default function Compare({ onReset }: CompareProps) {
                         </div>
                       </div>
 
-                      {/* Required Docs */}
-                      <div className="space-y-3">
-                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Documentation</div>
-                        <div className="flex flex-wrap gap-2">
+                      {/* Primary Responsibilities */}
+                      <div className="space-y-4">
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Core Responsibilities</div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                             <div className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-1">Export</div>
+                             <div className="text-[10px] font-black text-slate-700">{info.responsibilities.export}</div>
+                          </div>
+                          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                             <div className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-1">Freight</div>
+                             <div className="text-[10px] font-black text-slate-700">{info.responsibilities.mainTransport}</div>
+                          </div>
+                          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                             <div className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-1">Insurance</div>
+                             <div className="text-[10px] font-black text-slate-700">{info.responsibilities.insurance}</div>
+                          </div>
+                          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                             <div className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-1">Import</div>
+                             <div className="text-[10px] font-black text-slate-700">{info.responsibilities.import}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Required Docs - More structured */}
+                      <div className="space-y-4">
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Key Documentation Basis</div>
+                        <div className="grid gap-2">
                           {info.requiredDocuments?.map((doc, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-[9px] font-bold">
-                              {doc}
-                            </span>
+                            <div key={idx} className="p-3 bg-slate-50 border border-slate-100 rounded-xl group relative overflow-hidden">
+                              <div className="absolute left-0 top-0 w-1 h-full bg-blue-500/20" />
+                              <div className="flex justify-between items-start">
+                                <span className="text-[10px] font-bold text-slate-700">{doc}</span>
+                                <FileText size={10} className="text-slate-300" />
+                              </div>
+                            </div>
                           ))}
+                        </div>
+                        <div className="text-[9px] text-slate-400 font-medium italic">
+                          Compliance: Incoterms® 2020 & UCP 600 standards.
                         </div>
                       </div>
 
