@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Truck, Ship, ArrowRight, ShieldCheck, HelpCircle, Globe, FileText, Leaf } from 'lucide-react';
+import { Truck, Ship, ArrowRight, ShieldCheck, HelpCircle, Globe, FileText, Leaf, Columns } from 'lucide-react';
 import { DECISION_TREE } from './data/incoterms';
 import ResultDisplay from './components/ResultDisplay';
 import Home from './components/Home';
+import Compare from './components/Compare';
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'wizard'>('home');
+  const [view, setView] = useState<'home' | 'wizard' | 'compare'>('home');
   const [currentStepId, setCurrentStepId] = useState<string>('START_ROLE');
   const [history, setHistory] = useState<string[]>([]);
   const [result, setResult] = useState<string | null>(null);
@@ -44,6 +45,11 @@ export default function App() {
     setView('wizard');
   };
 
+  const startCompare = () => {
+    reset();
+    setView('compare');
+  };
+
   const goHome = () => {
     setView('home');
     reset();
@@ -62,8 +68,17 @@ export default function App() {
           </div>
           <div className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
             <button onClick={goHome} className="hover:text-emerald-600 transition-colors">Intelligence</button>
-            <button onClick={startWizard} className="hover:text-emerald-600 transition-colors">Analyzer</button>
-            <a href="#" className="hover:text-emerald-600 transition-colors">Standards</a>
+            <button onClick={startCompare} className={`hover:text-emerald-600 transition-colors ${view === 'compare' ? 'text-emerald-600' : ''}`}>Compare</button>
+            <button onClick={startWizard} className={`hover:text-emerald-600 transition-colors ${view === 'wizard' ? 'text-emerald-600' : ''}`}>Analyzer</button>
+            <a href="#standards" onClick={(e) => {
+              if (view !== 'home') {
+                e.preventDefault();
+                goHome();
+                setTimeout(() => {
+                  document.getElementById('standards')?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }
+            }} className="hover:text-emerald-600 transition-colors">Standards</a>
             <button 
               onClick={startWizard}
               className="px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all flex items-center gap-2 shadow-xl shadow-slate-900/10"
@@ -85,13 +100,23 @@ export default function App() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <Home onStartWizard={startWizard} />
+              <Home onStartWizard={startWizard} onStartCompare={startCompare} />
             </motion.div>
+          ) : view === 'compare' ? (
+            <div className="max-w-7xl mx-auto px-6 py-12 md:py-20 min-h-[70vh]">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <Compare onReset={goHome} />
+              </motion.div>
+            </div>
           ) : (
             <div className="max-w-5xl mx-auto px-6 py-12 md:py-20 min-h-[70vh]">
               <AnimatePresence mode="wait">
                 {result ? (
-                  <ResultDisplay key="result" code={result} onReset={reset} />
+                  <ResultDisplay code={result} onReset={reset} />
                 ) : (
                   <motion.div
                     key={currentStepId}
@@ -116,7 +141,7 @@ export default function App() {
                       <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100">
                         Operational Wizard — Analysis {history.length + 1}
                       </div>
-                      <h2 className="text-5xl md:text-8xl font-black text-slate-900 tracking-tighter leading-[0.9] max-w-4xl">
+                      <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight max-w-4xl">
                         {currentStep?.question}
                       </h2>
                     </div>

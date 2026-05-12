@@ -57,10 +57,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 70, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Use electric terminal tractors for alongside delivery to lower port emissions.' },
-      { type: 'warning', text: 'CSRD 2022/2464/EU: Scope 3 data handover at "alongside" point is often a reporting blind spot.' },
-      { type: 'danger', text: 'Sphera 2025: Major data gaps exist in terminal loading emissions; Buyer lacks visibility.' },
-      { type: 'info', text: 'GHG Protocol 2004: All ocean transport emissions fall under Buyer Cat 4 responsibility.' }
+      { type: 'tip', text: 'Use electric terminal tractors for alongside delivery to lower port emissions.' },
+      { type: 'warning', text: 'Scope 3 data handover at "alongside" point is often a reporting blind spot.' },
+      { type: 'danger', text: 'Major data gaps exist in terminal loading emissions; Buyer lacks visibility.' },
+      { type: 'info', text: 'All ocean transport emissions fall under Buyer Cat 4 responsibility.' }
     ],
     insights: [
       { type: 'tip', text: 'Best for bulk commodities like grain or coal where shore-based cranes are used.' },
@@ -95,10 +95,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 60, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Prioritize carriers with eco-efficient ship designs for the main carriage.' },
-      { type: 'warning', text: 'CSRD Directive: Detailed primary data needed from the stevedoring company for loading emissions.' },
-      { type: 'danger', text: 'Sphera 2025: Containerized cargo on FOB often leads to Scope 3 "Double Counting" errors.' },
-      { type: 'info', text: 'EC Omnibus 2025: New rules require digital product passports to include FOB port data.' }
+      { type: 'tip', text: 'Prioritize carriers with eco-efficient ship designs for the main carriage.' },
+      { type: 'warning', text: 'Detailed primary data needed from the stevedoring company for loading emissions.' },
+      { type: 'danger', text: 'Containerized cargo on FOB often leads to Scope 3 "Double Counting" errors.' },
+      { type: 'info', text: 'New rules require digital product passports to include FOB port data.' }
     ],
     insights: [
       { type: 'tip', text: 'Standard for many ocean shipments. Clear cut-off point for risk.' },
@@ -133,10 +133,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 20, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Use green procurement criteria when the Seller selects the ocean carrier.' },
-      { type: 'info', text: 'GHG Protocol: Although Seller pays, Buyer must still report as Cat 4 (upstream).' },
-      { type: 'warning', text: 'CSRD 2024: Seller must share actual emission data, not just theoretical averages.' },
-      { type: 'danger', text: 'Sphera 2025: CIF limits Buyer\'s ability to switch to low-carbon vessel options.' }
+      { type: 'tip', text: 'Use green procurement criteria when the Seller selects the ocean carrier.' },
+      { type: 'info', text: 'Although Seller pays, Buyer must still report as Cat 4 (upstream).' },
+      { type: 'warning', text: 'Seller must share actual emission data, not just theoretical averages.' },
+      { type: 'danger', text: 'CIF limits Buyer\'s ability to switch to low-carbon vessel options.' }
     ],
     insights: [
       { type: 'tip', text: 'Seller handles booking freight, making it easier for first-time buyers.' },
@@ -171,10 +171,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 20, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Optimize vessel filling rates to reduce the intensity per TEU.' },
-      { type: 'warning', text: 'CSRD Directive: Detailed secondary data is required if primary carrier data is absent.' },
-      { type: 'info', text: 'EC Omnibus: Reporting obligations for CFR must account for cross-border carbon taxes.' },
-      { type: 'danger', text: 'Sphera 2025: Risk/Control decoupling makes carbon optimization difficult for the Buyer.' }
+      { type: 'tip', text: 'Optimize vessel filling rates to reduce the intensity per TEU.' },
+      { type: 'warning', text: 'Detailed secondary data is required if primary carrier data is absent.' },
+      { type: 'info', text: 'Reporting obligations for CFR must account for cross-border carbon taxes.' },
+      { type: 'danger', text: 'Risk/Control decoupling makes carbon optimization difficult for the Buyer.' }
     ],
     insights: [
       { type: 'tip', text: 'Useful when the Buyer has its own global insurance policy.' },
@@ -209,10 +209,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 95, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'info', text: 'GHG Protocol: 95% of logistical emissions are the Buyer\'s Upstream Cat 4 responsibility.' },
-      { type: 'warning', text: 'CSRD 2024: SMEs using EXW often fail to capture factory-gate loading emissions.' },
-      { type: 'danger', text: 'Sphera 2025: Maximum "Data Gap" risk. Buyer rarely gets accurate energy data from Seller.' },
-      { type: 'tip', text: 'SFC 2019: Use EXW if you have a "Green First" carrier partnership at the origin.' }
+      { type: 'info', text: '95% of logistical emissions are the Buyer\'s Upstream Cat 4 responsibility.' },
+      { type: 'warning', text: 'SMEs using EXW often fail to capture factory-gate loading emissions.' },
+      { type: 'danger', text: 'Maximum "Data Gap" risk. Buyer rarely gets accurate energy data from Seller.' },
+      { type: 'tip', text: 'Use EXW if you have a "Green First" carrier partnership at the origin.' }
     ],
     insights: [
       { type: 'danger', text: 'Buyer is responsible for loading. Seller has NO duty to assist.' },
@@ -247,10 +247,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 80, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Encourage Seller to use electric last-mile vans for terminal delivery.' },
-      { type: 'info', text: 'CSRD: FCA provides a clean data split point for legal carbon reporting.' },
-      { type: 'warning', text: 'EC SME 2003: Small sellers may need help calculating their Cat 9 (outbound) share.' },
-      { type: 'info', text: 'Sphera 2025: Higher reporting accuracy due to clear carrier handover documentation.' }
+      { type: 'tip', text: 'Encourage Seller to use electric last-mile vans for terminal delivery.' },
+      { type: 'info', text: 'FCA provides a clean data split point for legal carbon reporting.' },
+      { type: 'warning', text: 'Small sellers may need help calculating their Cat 9 (outbound) share.' },
+      { type: 'info', text: 'Higher reporting accuracy due to clear carrier handover documentation.' }
     ],
     insights: [
       { type: 'tip', text: 'The modern standard for containers. Replaces FOB for tech, retail, etc.' },
@@ -285,10 +285,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 15, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'warning', text: 'CSRD 2024: Seller must disclose if air-freight was used for faster transit under CIP.' },
-      { type: 'tip', text: 'SFC 2019: Use Intermodal transport (Rail+Road) to reduce Cat 9 emissions by 60%.' },
-      { type: 'info', text: 'Sphera 2025: Insurance premiums under CIP rarely factor in carbon-offsetting costs.' },
-      { type: 'danger', text: 'EC Omnibus: New taxes on aviation fuel make CIP air-delivery significantly more expensive.' }
+      { type: 'warning', text: 'Seller must disclose if air-freight was used for faster transit under CIP.' },
+      { type: 'tip', text: 'Use Intermodal transport (Rail+Road) to reduce Cat 9 emissions by 60%.' },
+      { type: 'info', text: 'Insurance premiums under CIP rarely factor in carbon-offsetting costs.' },
+      { type: 'danger', text: 'New taxes on aviation fuel make CIP air-delivery significantly more expensive.' }
     ],
     insights: [
       { type: 'warning', text: 'Higher insurance required! Seller MUST provide ICC Clause A (All Risk).' },
@@ -323,10 +323,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 15, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Consolidate smaller CPT shipments into full truckloads (FTL) to save fuel.' },
-      { type: 'warning', text: 'CSRD Directive: Buyer still holds responsibility for Cat 4 reporting under CPT.' },
-      { type: 'info', text: 'EC 2003 SME: CPT allows smaller buyers to leverage Seller\'s larger logistics scale.' },
-      { type: 'danger', text: 'Sphera 2025: "Least-cost" routing by the Seller often ignores carbon-intensive routes.' }
+      { type: 'tip', text: 'Consolidate smaller CPT shipments into full truckloads (FTL) to save fuel.' },
+      { type: 'warning', text: 'Buyer still holds responsibility for Cat 4 reporting under CPT.' },
+      { type: 'info', text: 'CPT allows smaller buyers to leverage Seller\'s larger logistics scale.' },
+      { type: 'danger', text: ' "Least-cost" routing by the Seller often ignores carbon-intensive routes.' }
     ],
     insights: [
       { type: 'tip', text: 'Efficient for road transport within Europe or North America.' },
@@ -361,10 +361,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 5, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Use biodiesel-powered forklifts for the heavy unloading mandated by DPU.' },
-      { type: 'warning', text: 'CSRD 2024: Unloading energy consumption is often omitted from Cat 9 reports.' },
-      { type: 'info', text: 'EC 2003: Simplifies reporting for the Buyer significantly compared to EXW.' },
-      { type: 'danger', text: 'Sphera 2025: Seller specialized unloading equipment must meet local GHG standards.' }
+      { type: 'tip', text: 'Use biodiesel-powered forklifts for the heavy unloading mandated by DPU.' },
+      { type: 'warning', text: 'Unloading energy consumption is often omitted from Cat 9 reports.' },
+      { type: 'info', text: 'Simplifies reporting for the Buyer significantly compared to EXW.' },
+      { type: 'danger', text: 'Seller specialized unloading equipment must meet local GHG standards.' }
     ],
     insights: [
       { type: 'tip', text: 'Perfect for oversized machinery where Seller has the specialized team.' },
@@ -399,10 +399,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 10, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: Select final-mile delivery windows to avoid peak-traffic congestion (and CO2).' },
-      { type: 'info', text: 'GHG Protocol: Clear allocation of emissions until the doorstep of the destination.' },
-      { type: 'warning', text: 'CSRD 2024: Mandatory reporting of fuel use for cross-border trucking under DAP.' },
-      { type: 'danger', text: 'Sphera 2025: Waiting times at destination increase idling emissions (Buyer responsibility).' }
+      { type: 'tip', text: 'Select final-mile delivery windows to avoid peak-traffic congestion (and CO2).' },
+      { type: 'info', text: 'Clear allocation of emissions until the doorstep of the destination.' },
+      { type: 'warning', text: 'Mandatory reporting of fuel use for cross-border trucking under DAP.' },
+      { type: 'danger', text: 'Waiting times at destination increase idling emissions (Buyer responsibility).' }
     ],
     insights: [
       { type: 'tip', text: 'Great for e-commerce or regular B2B road freight.' },
@@ -437,10 +437,10 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       { label: 'Buyer Scope 3 Cat 4', percentage: 2, color: 'bg-red-500' }
     ],
     sustainabilityInsights: [
-      { type: 'tip', text: 'SFC 2019: DDP offers the Seller total control to implement "Net Zero" logistics end-to-end.' },
-      { type: 'danger', text: 'EC Omnibus: Carbon Border Adjustment Mechanism (CBAM) complicates DDP tax filings.' },
-      { type: 'warning', text: 'CSRD 2024: Seller must include all international legs in their Scope 3 disclosure.' },
-      { type: 'info', text: 'Sphera 2025: Highest transparency for the Buyer, as they inherit a carbon-cleared product.' }
+      { type: 'tip', text: 'DDP offers the Seller total control to implement "Net Zero" logistics end-to-end.' },
+      { type: 'danger', text: 'Carbon Border Adjustment Mechanism (CBAM) complicates DDP tax filings.' },
+      { type: 'warning', text: 'Seller must include all international legs in their Scope 3 disclosure.' },
+      { type: 'info', text: 'Highest transparency for the Buyer, as they inherit a carbon-cleared product.' }
     ],
     insights: [
       { type: 'danger', text: 'Maximum risk for Seller. Everything is their responsibility until delivery.' },

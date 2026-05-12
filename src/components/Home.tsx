@@ -1,11 +1,13 @@
+import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Globe, ShieldCheck, Leaf, FileText, Ship, Truck, Package, Clock } from 'lucide-react';
 
 interface HomeProps {
   onStartWizard: () => void;
+  onStartCompare: () => void;
 }
 
-export default function Home({ onStartWizard }: HomeProps) {
+export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -46,8 +48,11 @@ export default function Home({ onStartWizard }: HomeProps) {
                 Start Free Analysis
                 <ArrowRight className="group-hover:translate-x-1 transition-transform" size={24} />
               </button>
-              <button className="px-8 py-5 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-black text-lg transition-all backdrop-blur-md border border-white/10">
-                View Enterprise Solutions
+              <button 
+                onClick={onStartCompare}
+                className="px-8 py-5 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-black text-lg transition-all backdrop-blur-md border border-white/10"
+              >
+                Compare Terms
               </button>
             </div>
           </motion.div>
@@ -58,35 +63,62 @@ export default function Home({ onStartWizard }: HomeProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="hidden md:block relative"
           >
-             <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform duration-700">
-                  <Globe size={150} />
-                </div>
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4 border-b border-white/10 pb-6">
-                    <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">01</div>
-                    <div>
-                      <div className="text-white font-bold">Select Your Role</div>
-                      <div className="text-slate-400 text-sm">Buyer or Seller perspective</div>
+             <div className="space-y-6">
+               <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform duration-700">
+                    <Globe size={150} />
+                  </div>
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4 border-b border-white/10 pb-6">
+                      <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">01</div>
+                      <div>
+                        <div className="text-white font-bold">Select Your Role</div>
+                        <div className="text-slate-400 text-sm">Buyer or Seller perspective</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 border-b border-white/10 pb-6">
+                      <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">02</div>
+                      <div>
+                        <div className="text-white font-bold">Quantify Impact</div>
+                        <div className="text-slate-400 text-sm">Risk Scores & CO2 Data</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">03</div>
+                      <div>
+                        <div className="text-white font-bold">Generate Docs</div>
+                        <div className="text-slate-400 text-sm">Automated legal checklists</div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 border-b border-white/10 pb-6">
-                    <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">02</div>
-                    <div>
-                      <div className="text-white font-bold">Quantify Impact</div>
-                      <div className="text-slate-400 text-sm">Risk Scores & CO2 Data</div>
-                    </div>
+               </div>
+
+               {/* Quick Standards Reference */}
+               <div id="standards" className="bg-slate-900/40 backdrop-blur-md border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
+                  <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-4">
+                    <FileText className="text-emerald-500" size={20} />
+                    <h3 className="text-white font-bold uppercase tracking-widest text-xs">Technical Standards</h3>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">03</div>
-                    <div>
-                      <div className="text-white font-bold">Generate Docs</div>
-                      <div className="text-slate-400 text-sm">Automated legal checklists</div>
-                    </div>
+                  <div className="space-y-3 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
+                    {[
+                      "ICC Incoterms® 2020",
+                      "ICC UCP 600 & ISBP 745",
+                      "Sphera 2025 Scope 3 Report",
+                      "GHG Protocol 2004 Standard",
+                      "EU CSRD Directive 2022/2464/EU",
+                      "Smart Freight Centre (SFC) 2019",
+                      "European Commission (2003/361/EC)"
+                    ].map((ref, i) => (
+                      <div key={i} className="flex gap-3 items-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <p className="text-[10px] text-slate-300 font-bold tracking-tight uppercase">{ref}</p>
+                      </div>
+                    ))}
                   </div>
-                </div>
+               </div>
              </div>
              {/* Decorative Elements */}
+
              <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-[80px]" />
              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-[60px]" />
           </motion.div>

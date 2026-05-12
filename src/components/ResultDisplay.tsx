@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'motion/react';
 import { Leaf, Info, Shield, Truck, Ship, Package, Globe, CheckCircle2, RefreshCcw, FileText, AlertTriangle } from 'lucide-react';
 import { INCOTERMS, type IncotermInfo } from '../data/incoterms';
@@ -259,7 +260,7 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                   </div>
                 </div>
                 <p className="text-slate-300 text-sm leading-relaxed font-medium">
-                  Logistics carbon footprint governed by GHG Protocol 2004 standards and CSRD Directive 2022/2464/EU. Current terminal and main carriage metrics reflect SFC 2019 guidelines and Sphera 2025 risk reports.
+                  Logistics carbon footprint is analyzed across all applicable scopes using industry benchmarks. Current terminal and main carriage metrics are quantified based on typical transit intensity and logistics data frameworks.
                 </p>
               </div>
 
@@ -283,28 +284,15 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                 ))}
               </div>
 
-              <div className="pt-6 border-t border-slate-800 text-[9px] text-slate-500 font-medium leading-relaxed italic relative z-10">
-                Citations: GHG Protocol 2004, CSRD Directive 2022/2464/EU, Sphera 2025 Scope 3 Report, SFC 2019, EC Omnibus 2025, EC 2003/361/EC.
+              <div className="pt-6 border-t border-slate-800 text-[10px] text-slate-500 font-medium leading-relaxed italic relative z-10">
+                Data sources: GHG Protocol, CSRD Framework, and Sphera Logistics Carbon Benchmarks.
               </div>
             </section>
 
-            {/* Documentation */}
-            <section>
-              <h3 className="flex items-center gap-2 text-slate-900 font-bold text-xl mb-6">
-                <FileText className="text-slate-600" size={24} />
-                Required Documentation
-              </h3>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {info.requiredDocuments.map((doc, i) => (
-                  <div key={i} className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                    <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-blue-600">
-                      <CheckCircle2 size={16} />
-                    </div>
-                    <span className="text-sm font-bold text-slate-700">{doc}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {/* Risk Disclaimer */}
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 italic text-slate-500 text-xs mt-8">
+              Based on International Chamber of Commerce (ICC) Incoterms® 2020 rules. This analysis is for informational purposes only.
+            </div>
           </div>
 
           {/* Sidebar Column */}
