@@ -34,6 +34,29 @@ export interface IncotermInfo {
     insurance: 'Buyer' | 'Seller' | 'Optional';
     import: 'Buyer' | 'Seller';
   };
+  detailedAnalysis: {
+    costAllocation: {
+      sellerPercentage: number;
+      buyerPercentage: number;
+    };
+    costTransferPoint: string;
+    customs: {
+      export: Role;
+      transit: Role;
+      import: Role;
+    };
+    insurance: {
+      responsible: Role | 'Optional' | 'Both';
+      minimumCoverage: string;
+    };
+    transport: {
+      contracting: Role;
+    };
+    delivery: {
+      point: string;
+      notices: string;
+    };
+  };
 }
 
 export const INCOTERMS: Record<string, IncotermInfo> = {
@@ -52,9 +75,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 30,
     buyerCarbonControl: 70,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 25, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 70, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 25, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 70, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Use electric terminal tractors for alongside delivery to lower port emissions.' },
@@ -73,6 +96,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Buyer',
       insurance: 'Buyer',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 30, buyerPercentage: 70 },
+      costTransferPoint: 'Alongside vessel at named port',
+      customs: { export: 'Seller', transit: 'Buyer', import: 'Buyer' },
+      insurance: { responsible: 'Buyer', minimumCoverage: 'No obligation for Seller; Buyer carries risk' },
+      transport: { contracting: 'Buyer' },
+      delivery: { point: 'Alongside vessel at named port', notices: 'Seller must give Buyer notice that goods have been delivered alongside' }
     }
   },
   FOB: {
@@ -90,9 +121,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 40,
     buyerCarbonControl: 60,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 35, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 60, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 35, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 60, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Prioritize carriers with eco-efficient ship designs for the main carriage.' },
@@ -111,6 +142,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Buyer',
       insurance: 'Buyer',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 40, buyerPercentage: 60 },
+      costTransferPoint: 'On board the vessel at named port',
+      customs: { export: 'Seller', transit: 'Buyer', import: 'Buyer' },
+      insurance: { responsible: 'Buyer', minimumCoverage: 'No obligation for Seller; risk transfers on board' },
+      transport: { contracting: 'Buyer' },
+      delivery: { point: 'On board the vessel at named port', notices: 'Seller must notify Buyer that goods have been delivered on board' }
     }
   },
   CIF: {
@@ -128,9 +167,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 80,
     buyerCarbonControl: 20,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 75, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 20, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 75, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 20, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Use green procurement criteria when the Seller selects the ocean carrier.' },
@@ -149,6 +188,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Seller',
       insurance: 'Seller',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 80, buyerPercentage: 20 },
+      costTransferPoint: 'Destination port/vessel',
+      customs: { export: 'Seller', transit: 'Seller', import: 'Buyer' },
+      insurance: { responsible: 'Seller', minimumCoverage: 'ICC Clause C (Minimum coverage required)' },
+      transport: { contracting: 'Seller' },
+      delivery: { point: 'On board at origin port', notices: 'Seller must give Buyer notice for checking of goods' }
     }
   },
   CFR: {
@@ -166,9 +213,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 80,
     buyerCarbonControl: 20,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 75, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 20, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 75, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 20, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Optimize vessel filling rates to reduce the intensity per TEU.' },
@@ -187,6 +234,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Seller',
       insurance: 'Buyer',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 75, buyerPercentage: 25 },
+      costTransferPoint: 'Destination port/vessel',
+      customs: { export: 'Seller', transit: 'Seller', import: 'Buyer' },
+      insurance: { responsible: 'Buyer', minimumCoverage: 'No obligation for Seller' },
+      transport: { contracting: 'Seller' },
+      delivery: { point: 'On board at origin port', notices: 'Seller must notify Buyer that goods have been delivered' }
     }
   },
   EXW: {
@@ -204,9 +259,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 5,
     buyerCarbonControl: 95,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 0, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 95, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 0, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 95, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'info', text: '95% of logistical emissions are the Buyer\'s Upstream Cat 4 responsibility.' },
@@ -225,6 +280,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Buyer',
       insurance: 'Buyer',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 5, buyerPercentage: 95 },
+      costTransferPoint: 'Seller\'s warehouse or named place',
+      customs: { export: 'Buyer', transit: 'Buyer', import: 'Buyer' },
+      insurance: { responsible: 'Buyer', minimumCoverage: 'No obligation for Seller; Buyer handles all insurance' },
+      transport: { contracting: 'Buyer' },
+      delivery: { point: 'Seller\'s warehouse or named place', notices: 'Seller must give Buyer notice of the date goods will be at disposal' }
     }
   },
   FCA: {
@@ -238,13 +301,13 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     requiredDocuments: ['Commercial Invoice', 'Packing List', 'Carrier Receipt', 'Export License'],
     mode: 'All Modes',
     transferPoint: 'Carrier\'s terminal or Seller\'s site',
-    transferPosition: 15,
+    transferPosition: 20,
     sellerCarbonControl: 20,
     buyerCarbonControl: 80,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 15, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 80, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 15, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 80, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Encourage Seller to use electric last-mile vans for terminal delivery.' },
@@ -263,6 +326,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Buyer',
       insurance: 'Buyer',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 20, buyerPercentage: 80 },
+      costTransferPoint: 'Named carrier or place',
+      customs: { export: 'Seller', transit: 'Buyer', import: 'Buyer' },
+      insurance: { responsible: 'Buyer', minimumCoverage: 'No obligation for Seller' },
+      transport: { contracting: 'Buyer' },
+      delivery: { point: 'Named carrier or place', notices: 'Seller must give notice that goods have been delivered to carrier' }
     }
   },
   CIP: {
@@ -280,9 +351,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 85,
     buyerCarbonControl: 15,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 80, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 15, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 80, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 15, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'warning', text: 'Seller must disclose if air-freight was used for faster transit under CIP.' },
@@ -301,6 +372,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Seller',
       insurance: 'Seller',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 85, buyerPercentage: 15 },
+      costTransferPoint: 'Named destination',
+      customs: { export: 'Seller', transit: 'Seller', import: 'Buyer' },
+      insurance: { responsible: 'Seller', minimumCoverage: 'ICC Clause A (All Risk required)' },
+      transport: { contracting: 'Seller' },
+      delivery: { point: 'Handed over to first carrier', notices: 'Seller must notify Buyer that goods are delivered to carrier' }
     }
   },
   CPT: {
@@ -318,9 +397,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 85,
     buyerCarbonControl: 15,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 80, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 15, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 80, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 15, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Consolidate smaller CPT shipments into full truckloads (FTL) to save fuel.' },
@@ -339,6 +418,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Seller',
       insurance: 'Buyer',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 80, buyerPercentage: 20 },
+      costTransferPoint: 'Named destination',
+      customs: { export: 'Seller', transit: 'Seller', import: 'Buyer' },
+      insurance: { responsible: 'Buyer', minimumCoverage: 'No obligation for Seller' },
+      transport: { contracting: 'Seller' },
+      delivery: { point: 'Handed over to first carrier', notices: 'Seller must notify Buyer of delivery to carrier' }
     }
   },
   DPU: {
@@ -356,9 +443,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 95,
     buyerCarbonControl: 5,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 90, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 5, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 90, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 5, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Use biodiesel-powered forklifts for the heavy unloading mandated by DPU.' },
@@ -377,6 +464,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Seller',
       insurance: 'Seller',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 95, buyerPercentage: 5 },
+      costTransferPoint: 'Named destination, unloaded',
+      customs: { export: 'Seller', transit: 'Seller', import: 'Buyer' },
+      insurance: { responsible: 'Seller', minimumCoverage: 'Recommended All Risk (Seller covers until destination)' },
+      transport: { contracting: 'Seller' },
+      delivery: { point: 'Named destination, unloaded', notices: 'Seller must notify Buyer to allow receiving of goods' }
     }
   },
   DAP: {
@@ -394,9 +489,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 90,
     buyerCarbonControl: 10,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 85, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 10, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 85, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 10, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'Select final-mile delivery windows to avoid peak-traffic congestion (and CO2).' },
@@ -415,6 +510,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Seller',
       insurance: 'Seller',
       import: 'Buyer'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 90, buyerPercentage: 10 },
+      costTransferPoint: 'Named destination',
+      customs: { export: 'Seller', transit: 'Seller', import: 'Buyer' },
+      insurance: { responsible: 'Seller', minimumCoverage: 'Seller usually insures until point of delivery' },
+      transport: { contracting: 'Seller' },
+      delivery: { point: 'Named destination, ready for unloading', notices: 'Seller must notify Buyer for unloading preparation' }
     }
   },
   DDP: {
@@ -432,9 +535,9 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
     sellerCarbonControl: 98,
     buyerCarbonControl: 2,
     scope3Allocation: [
-      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-emerald-600' },
-      { label: 'Seller Scope 3 Cat 9', percentage: 93, color: 'bg-emerald-400' },
-      { label: 'Buyer Scope 3 Cat 4', percentage: 2, color: 'bg-red-500' }
+      { label: 'Seller Scope 1/2', percentage: 5, color: 'bg-blue-600' },
+      { label: 'Seller Scope 3 Cat 9', percentage: 93, color: 'bg-blue-400' },
+      { label: 'Buyer Scope 3 Cat 4', percentage: 2, color: 'bg-orange-500' }
     ],
     sustainabilityInsights: [
       { type: 'tip', text: 'DDP offers the Seller total control to implement "Net Zero" logistics end-to-end.' },
@@ -453,6 +556,14 @@ export const INCOTERMS: Record<string, IncotermInfo> = {
       mainTransport: 'Seller',
       insurance: 'Seller',
       import: 'Seller'
+    },
+    detailedAnalysis: {
+      costAllocation: { sellerPercentage: 98, buyerPercentage: 2 },
+      costTransferPoint: 'Buyer\'s destination',
+      customs: { export: 'Seller', transit: 'Seller', import: 'Seller' },
+      insurance: { responsible: 'Seller', minimumCoverage: 'Seller covers all risks until final delivery' },
+      transport: { contracting: 'Seller' },
+      delivery: { point: 'Buyer\'s destination, cleared for import', notices: 'Seller must notify Buyer for unloading' }
     }
   }
 };
