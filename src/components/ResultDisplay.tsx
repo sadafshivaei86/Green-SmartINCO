@@ -10,6 +10,33 @@ interface ResultDisplayProps {
   onReset: () => void;
 }
 
+const STAGES = [
+  { label: 'Origin Factory', icon: Package },
+  { label: 'Inland Freight', icon: Truck },
+  { label: 'Export Customs', icon: Globe },
+  { label: 'Alongside Vessel', icon: Ship },
+  { label: 'Main Carriage', icon: Ship },
+  { label: 'Import Customs', icon: Binary },
+  { label: 'Destination', icon: CheckCircle2 },
+];
+
+const getTransferIndices = (code: string) => {
+  const mapping: Record<string, { risk: number; cost: number }> = {
+    'EXW': { risk: 0, cost: 0 },
+    'FCA': { risk: 1, cost: 1 },
+    'FAS': { risk: 3, cost: 3 },
+    'FOB': { risk: 3, cost: 3 },
+    'CFR': { risk: 3, cost: 5 },
+    'CIF': { risk: 3, cost: 5 },
+    'CPT': { risk: 1, cost: 6 },
+    'CIP': { risk: 1, cost: 6 },
+    'DAP': { risk: 6, cost: 6 },
+    'DPU': { risk: 6, cost: 6 },
+    'DDP': { risk: 6, cost: 6 }
+  };
+  return mapping[code] || { risk: 0, cost: 0 };
+};
+
 type TabType = 'incoterms' | 'sustainability' | 'compliance' | 'all';
 type ViewMode = 'hub' | 'detail';
 
@@ -105,6 +132,90 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                     <div className="w-3 h-3 bg-orange-500 rounded-full" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Buyer</span>
                   </div>
+                </div>
+              </div>
+
+              {/* Linear Responsibility Timeline */}
+              <div className="py-16 px-6">
+                <div className="relative pt-8">
+                  {/* Legend/Zone Indicators */}
+                  <div className="absolute -top-6 left-0 w-full flex justify-between px-2">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full bg-blue-600" />
+                      <span className="text-[8px] font-black uppercase tracking-widest text-blue-600">
+                        Seller Managed
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[8px] font-black uppercase tracking-widest text-orange-600 text-right">
+                        Buyer Managed
+                      </span>
+                      <div className="w-2 h-2 rounded-full bg-orange-600" />
+                    </div>
+                  </div>
+
+                  {/* The Base Line (Buyer background) */}
+                  <div className="absolute top-1/2 left-0 w-full h-1.5 bg-orange-100 -translate-y-1/2 rounded-full" />
+                  
+                  {/* Seller Activity Line (Based on Cost) */}
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(getTransferIndices(code).cost / (STAGES.length - 1)) * 100}%` }}
+                    className="absolute top-1/2 left-0 h-1.5 bg-blue-600 -translate-y-1/2 rounded-full z-10 shadow-[0_0_10px_rgba(37,99,235,0.3)]"
+                  />
+
+                  <div className="flex justify-between relative z-20">
+                    {STAGES.map((stage, idx) => {
+                      const { risk, cost } = getTransferIndices(code);
+                      const isRiskPoint = risk === idx;
+                      const isCostPoint = cost === idx;
+                      const isSellerZone = idx <= cost;
+                      
+                      return (
+                        <div key={idx} className="flex flex-col items-center group">
+                          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500 rotate-45 shadow-sm group-hover:rotate-0 group-hover:scale-110 ${
+                            isSellerZone 
+                              ? 'bg-blue-600 text-white shadow-blue-200' 
+                              : 'bg-white border-2 border-orange-500 text-orange-600'
+                          }`}>
+                            <div className="-rotate-45 group-hover:rotate-0 transition-transform">
+                              <stage.icon size={16} />
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6 flex flex-col items-center text-center">
+                            <span className={`text-[8px] font-black uppercase tracking-tighter max-w-[60px] leading-tight mb-2 transition-colors ${
+                              isSellerZone ? 'text-blue-600' : 'text-orange-600'
+                            }`}>
+                              {stage.label}
+                            </span>
+                            
+                            <div className="flex flex-col gap-1.5 min-h-[40px]">
+                              {isRiskPoint && (
+                                <motion.div 
+                                  initial={{ opacity: 0, y: 5 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  className="bg-slate-900 text-white text-[7px] font-black px-2 py-1 rounded-lg uppercase tracking-widest whitespace-nowrap shadow-xl flex items-center gap-1 border border-white/20"
+                                >
+                                  <Shield size={8} /> Risk Transfer
+                                </motion.div>
+                              )}
+                              {isCostPoint && (
+                                <motion.div 
+                                  initial={{ opacity: 0, y: 5 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  className="bg-red-600 text-white text-[7px] font-black px-2 py-1 rounded-lg uppercase tracking-widest whitespace-nowrap shadow-xl flex items-center gap-1 border border-white/20"
+                                >
+                                  <RefreshCcw size={8} /> Cost Transfer
+                                </motion.div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
                 </div>
               </div>
 
