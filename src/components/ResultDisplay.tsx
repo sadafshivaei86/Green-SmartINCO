@@ -16,13 +16,28 @@ type ViewMode = 'hub' | 'detail';
 export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
   const [activeTab, setActiveTab] = useState<TabType>('incoterms');
   const [viewMode, setViewMode] = useState<ViewMode>('hub');
+  const [isPrintingReport, setIsPrintingReport] = useState(false);
   const info = INCOTERMS[code];
 
   if (!info) return null;
 
   const handleExportPDF = () => {
-    window.focus();
-    window.print();
+    setIsPrintingReport(false); // Global export
+    setTimeout(() => {
+      window.focus();
+      window.print();
+    }, 100);
+  };
+
+  const handleIncotermsReportPDF = () => {
+    setIsPrintingReport(true); // Report-only export
+    setTimeout(() => {
+      window.focus();
+      window.print();
+      // We don't necessarily need to reset it immediately because window.print blocks, 
+      // but a reset in the next tick or after-print event is safer.
+      setTimeout(() => setIsPrintingReport(false), 500);
+    }, 100);
   };
 
   return (
@@ -33,7 +48,7 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
       id="result-container"
     >
       {/* Header Card */}
-      <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100" id="result-header">
+      <div className={`bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 ${isPrintingReport ? 'print:hidden' : ''}`} id="result-header">
         <div className="bg-slate-900 p-10 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-10">
             <Globe size={180} />
@@ -178,7 +193,7 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
           <>
             {/* Analysis Detail View */}
             {/* Context Header with Navigation */}
-            <div className="bg-slate-50 border-b border-slate-200 px-10 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 sticky top-0 z-30 backdrop-blur-sm bg-slate-50/90 print:hidden">
+            <div className={`bg-slate-50 border-b border-slate-200 px-10 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 sticky top-0 z-30 backdrop-blur-sm bg-slate-50/90 print:hidden ${isPrintingReport ? 'print:hidden' : ''}`}>
               <div className="flex items-center gap-4">
                 <button 
                   onClick={() => setViewMode('hub')}
@@ -218,7 +233,21 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
               {/* Content Area */}
               <div className="max-w-4xl mx-auto">
                 <div className="space-y-12">
-                  <div className={(activeTab === 'all' || activeTab === 'incoterms') ? 'block' : 'hidden print:block'}>
+                  <div className={(activeTab === 'all' || activeTab === 'incoterms' || isPrintingReport) ? 'block' : 'hidden print:block'}>
+                    {/* Report Header for PDF */}
+                    <div className="hidden print:block mb-10 pb-6 border-b-4 border-slate-900">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h2 className="text-3xl font-black uppercase tracking-tighter text-slate-900">Incoterms® 2020 Technical Report</h2>
+                          <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1 text-slate-400">Institutional Logistics Analysis Portfolio</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-4xl font-black text-slate-900">{info.code}</div>
+                          <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Standard Code</div>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Strategic Risk Transfer Bar */}
                     <section className="space-y-8">
                       <div className="flex justify-between items-center px-4">
@@ -569,7 +598,7 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                         <div className="pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Finalize Documentation</p>
                            <button
-                             onClick={handleExportPDF}
+                             onClick={handleIncotermsReportPDF}
                              className="flex items-center gap-3 px-10 py-5 bg-slate-900 text-white rounded-[1.5rem] transition-all shadow-2xl hover:shadow-slate-900/40 hover:scale-[1.02] active:scale-95 text-sm font-black uppercase tracking-widest group print:hidden"
                            >
                              <Download size={20} className="group-hover:-translate-y-0.5 transition-transform" />
@@ -580,7 +609,7 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                     </section>
                   </div>
 
-                  <div className={(activeTab === 'all' || activeTab === 'sustainability') ? 'block' : 'hidden print:block'}>
+                  <div className={`${(activeTab === 'all' || activeTab === 'sustainability') ? 'block' : 'hidden print:block'} ${isPrintingReport ? 'print:hidden' : ''}`}>
                     {/* Sustainability Section */}
                     <section className="bg-slate-900 border border-slate-800 rounded-[2.5rem] p-10 shadow-2xl space-y-12 relative overflow-hidden">
                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
@@ -657,7 +686,7 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                     </section>
                   </div>
 
-                  <div className={(activeTab === 'all' || activeTab === 'compliance') ? 'block' : 'hidden print:block'}>
+                  <div className={`${(activeTab === 'all' || activeTab === 'compliance') ? 'block' : 'hidden print:block'} ${isPrintingReport ? 'print:hidden' : ''}`}>
                     {/* Institutional Standards Section */}
                     <section className="bg-white border border-slate-100 rounded-[2.5rem] p-1 shadow-sm overflow-hidden">
                       <div className="bg-slate-50 p-8 border-b border-slate-100">
