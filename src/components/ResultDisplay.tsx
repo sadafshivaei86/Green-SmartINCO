@@ -37,6 +37,341 @@ const getTransferIndices = (code: string) => {
   return mapping[code] || { risk: 0, cost: 0 };
 };
 
+interface GhgCsrdMetric {
+  rating: string;
+  ratingColor: string;
+  doubleCountingRisk: 'Low' | 'Medium' | 'High' | 'Critical';
+  operationalControl: string;
+  sellerScope3Category: string;
+  buyerScope3Category: string;
+  csrdMateriality: string;
+  esrsDisclosureRequired: string;
+  auditActionSeller: string;
+  auditActionBuyer: string;
+  sellerRoleDetails: string;
+  buyerRoleDetails: string;
+  regulatoryStandard: string;
+}
+
+interface GreenerOption {
+  code: string;
+  reason: string;
+  ghgVisibility: 'High' | 'Medium' | 'Low';
+  csrdReadiness: 'High' | 'Medium' | 'Low';
+  sellerControl: 'High' | 'Medium' | 'Low';
+}
+
+interface SplitGreenerSuggestion {
+  buyerSuggestions: GreenerOption[];
+  sellerSuggestions: GreenerOption[];
+}
+
+const getGreenerSuggestionsSeparate = (currentCode: string): SplitGreenerSuggestion => {
+  const defaults: Record<string, { ghgVisibility: 'High' | 'Medium' | 'Low'; csrdReadiness: 'High' | 'Medium' | 'Low'; sellerControl: 'High' | 'Medium' | 'Low' }> = {
+    'EXW': { ghgVisibility: 'High', csrdReadiness: 'Low', sellerControl: 'Low' },
+    'FCA': { ghgVisibility: 'High', csrdReadiness: 'High', sellerControl: 'Low' },
+    'FAS': { ghgVisibility: 'Medium', csrdReadiness: 'Medium', sellerControl: 'Low' },
+    'FOB': { ghgVisibility: 'High', csrdReadiness: 'Medium', sellerControl: 'Low' },
+    'CFR': { ghgVisibility: 'Low', csrdReadiness: 'Low', sellerControl: 'Medium' },
+    'CIF': { ghgVisibility: 'Low', csrdReadiness: 'Low', sellerControl: 'Medium' },
+    'CPT': { ghgVisibility: 'Medium', csrdReadiness: 'Medium', sellerControl: 'Medium' },
+    'CIP': { ghgVisibility: 'Medium', csrdReadiness: 'Medium', sellerControl: 'Medium' },
+    'DAP': { ghgVisibility: 'High', csrdReadiness: 'High', sellerControl: 'High' },
+    'DPU': { ghgVisibility: 'High', csrdReadiness: 'High', sellerControl: 'High' },
+    'DDP': { ghgVisibility: 'High', csrdReadiness: 'High', sellerControl: 'High' }
+  };
+
+  const getMetrics = (code: string) => defaults[code] || { ghgVisibility: 'Medium', csrdReadiness: 'Medium', sellerControl: 'Medium' };
+
+  const buildOption = (code: string, reason: string): GreenerOption => ({
+    code,
+    reason,
+    ...getMetrics(code)
+  });
+
+  const suggestions: Record<string, SplitGreenerSuggestion> = {
+    'EXW': {
+      buyerSuggestions: [
+        buildOption('FCA', 'FCA is the closest matches; it transitions loaded origin handover to the carrier terminal, avoiding early drayage reporting gaps at the factory door.')
+      ],
+      sellerSuggestions: [
+        buildOption('CPT', 'CPT is more operational; it enables you to arrange carrier consolidation, maximizing vehicle fill rates and reporting continuous pre-delivery transport metrics.')
+      ]
+    },
+    'FCA': {
+      buyerSuggestions: [
+        buildOption('FOB', 'FOB is the key ocean equivalent; moving custody up on-board allows you to trace terminal loading crane electrical footprints and select precise eco-efficient ocean routes.')
+      ],
+      sellerSuggestions: [
+        buildOption('CPT', 'CPT lets you consolidate carriage contracts directly, maximizing vehicle fill rates and reporting continuous pre-delivery transport metrics.')
+      ]
+    },
+    'FAS': {
+      buyerSuggestions: [
+        buildOption('FOB', 'FOB is the closest ocean alternative; it moves custody up on-board, allowing you to trace port crane electrical usage and terminal load carbon factors.')
+      ],
+      sellerSuggestions: [
+        buildOption('FCA', 'FCA is the closest intermodal option; it avoids complex port barge transfers by opting for inland terminal container handover, reducing drayage congestion emissions.')
+      ]
+    },
+    'FOB': {
+      buyerSuggestions: [
+        buildOption('FCA', 'FCA gives you earlier inland terminal handover control, allowing you to streamline multimodal routing and optimize pre-carriage emissions directly.')
+      ],
+      sellerSuggestions: [
+        buildOption('CFR', 'CFR lets you arrange ship bookings to negotiate directly with certified low-sulfur or bio-LNG powered ocean freight lines.')
+      ]
+    },
+    'CFR': {
+      buyerSuggestions: [
+        buildOption('FOB', 'FOB returns direct carrier selection power to you, allowing you to mandate clean-fuel or wind-assisted vessels instead of remaining passive.')
+      ],
+      sellerSuggestions: [
+        buildOption('CIF', 'CIF is the closest; it pairs ocean transit bookings with low-carbon maritime risk certificates and green-standard transit insurance.')
+      ]
+    },
+    'CIF': {
+      buyerSuggestions: [
+        buildOption('FOB', 'FOB is the most direct control shift, letting you regain active carrier selection to mandate low-emission shipping lines.')
+      ],
+      sellerSuggestions: [
+        buildOption('CIP', 'CIP is the closest; it modernizes sea transport splits into intermodal lanes and unifies supply chain tracking for continuous verification.')
+      ]
+    },
+    'CPT': {
+      buyerSuggestions: [
+        buildOption('FCA', 'FCA returns direct carrier selection and routing rights to you, letting you implement zero-emission regional distribution.')
+      ],
+      sellerSuggestions: [
+        buildOption('CIP', 'CIP is the closest; it adds verified transit insurance parameters to streamline regulatory audit compliance and risk reviews.')
+      ]
+    },
+    'CIP': {
+      buyerSuggestions: [
+        buildOption('FCA', 'FCA returns complete logistics control to you, enabling you to select carbon-neutral transport providers directly.')
+      ],
+      sellerSuggestions: [
+        buildOption('DAP', 'DAP is the closest; it extends your transport responsibilities to the destination gate to maximize cross-border logistical consolidation and reduce empty backhauls.')
+      ]
+    },
+    'DAP': {
+      buyerSuggestions: [
+        buildOption('DPU', 'DPU is the closest; responsibility is expanded to unloading, allowing you to run and log your eco-compliant terminal cranes at destination.')
+      ],
+      sellerSuggestions: [
+        buildOption('DDP', 'DDP is the closest; incorporates customs clearance and port duty filings directly, packaging total logistics tracking into one portal to streamline paperless green clearance.')
+      ]
+    },
+    'DPU': {
+      buyerSuggestions: [
+        buildOption('DAP', 'DAP is the closest alternative; it returns unloading control to your own certified eco-efficient terminal handlers at the destination place.')
+      ],
+      sellerSuggestions: [
+        buildOption('DDP', 'DDP is the closest; it integrates customs and port duty filing to streamline administrative paperwork, minimizing truck idling times during border delays.')
+      ]
+    },
+    'DDP': {
+      buyerSuggestions: [
+        buildOption('FCA', 'FCA is the closest F-term alternative; it returns direct eco-friendly ocean and road carrier selection rights to you instead of complete logistics passivity.')
+      ],
+      sellerSuggestions: [
+        buildOption('CIP', 'CIP is a collaborative shift; renegotiating to CIP allows you to share logistics responsibility and collaborate on carbon data systems with the buyer.')
+      ]
+    }
+  };
+
+  return suggestions[currentCode] || { buyerSuggestions: [], sellerSuggestions: [] };
+};
+
+const getGhgCsrdDetails = (code: string): GhgCsrdMetric => {
+  const defaults: GhgCsrdMetric = {
+    rating: "Split Boundary Allocation",
+    ratingColor: "text-amber-800 border-amber-200 bg-amber-50 shadow-sm",
+    doubleCountingRisk: "Medium",
+    operationalControl: "Shared Transport Booking",
+    sellerScope3Category: "Category 9: Downstream Transportation & Distribution",
+    buyerScope3Category: "Category 4: Upstream Transportation & Distribution",
+    csrdMateriality: "Requires detailed Scope 3 disclosures under ESRS E1 Climate Change mandates.",
+    esrsDisclosureRequired: "Energy-related Scope 3 greenhouse gas emissions from third-party maritime, rail, or air logistics.",
+    auditActionSeller: "Verify pre-carriage emissions up to point of delivery.",
+    auditActionBuyer: "Acquire secondary emission factors for main transport leg.",
+    sellerRoleDetails: "Responsible for reporting up to origin delivery point.",
+    buyerRoleDetails: "Responsible for reporting international freight and onward delivery.",
+    regulatoryStandard: "GHG Protocol (Dual Accounting) & CSRD (ESRS E1)"
+  };
+
+  const data: Record<string, GhgCsrdMetric> = {
+    'EXW': {
+      rating: "High Audit Imbalance",
+      ratingColor: "text-red-800 border-red-200 bg-red-50 shadow-sm",
+      doubleCountingRisk: "Low",
+      operationalControl: "100% Buyer Financial Control",
+      sellerScope3Category: "Scope 1 & 2 only (No transit emissions)",
+      buyerScope3Category: "Category 4: Upstream (100% of International & Domestic Transit)",
+      csrdMateriality: "Under ESRS E1, Buyer must report 100% of logistics emissions starting immediately from Seller's factory door. Seller has practically zero boundary responsibility for transit carbon.",
+      esrsDisclosureRequired: "Scope 3 Category 4 (Upstream Transport) detailing all road, port and maritime transit from origin warehouse.",
+      auditActionSeller: "Report only Scope 1 & 2 emissions associated with warehousing and loading at factory gate. No transit carbon liability on CSRD balance sheet.",
+      auditActionBuyer: "Request gross cargo weights and packaging dimension data from Seller; compute transport footprint using actual carrier fuel/drayage logs.",
+      sellerRoleDetails: "Only accounts for factory-door packaging and handling. Excludes any downstream transport.",
+      buyerRoleDetails: "Assumes massive Scope 3 Category 4 footprint from the moment goods leave the factory.",
+      regulatoryStandard: "ESRS E1-6 Paragraph 37 Boundary Control"
+    },
+    'FCA': {
+      rating: "Split Origin Handover",
+      ratingColor: "text-amber-800 border-amber-200 bg-amber-50 shadow-sm",
+      doubleCountingRisk: "Medium",
+      operationalControl: "Shared at Named Handover Point",
+      sellerScope3Category: "Category 9: Downstream (Pre-carriage to Carrier)",
+      buyerScope3Category: "Category 4: Upstream (Main Carriage & Forward Legs)",
+      csrdMateriality: "ESRS E1 mandates clear boundaries at named handover place. Seller tracks and discloses pre-carriage emissions up to carrier handover; Buyer tracks everything from point of main booking.",
+      esrsDisclosureRequired: "Scope 3 Cat 9 (Seller downstream pre-carriage) and Scope 3 Cat 4 (Buyer international legs).",
+      auditActionSeller: "Verify truck fuel/efficiency data for the short origin-leg to carrier terminal.",
+      auditActionBuyer: "Isolate main international leg from origin terminal. Ensure no double-counting with Seller's pre-carriage.",
+      sellerRoleDetails: "Responsible up to carrier surrender. Track local carrier Scope 3 emissions.",
+      buyerRoleDetails: "Responsible for main sea/air freight and final delivery carbon metrics.",
+      regulatoryStandard: "GHG Protocol Scope 3 Category 4/9 Guidance"
+    },
+    'FAS': {
+      rating: "Port-side Boundary Split",
+      ratingColor: "text-amber-800 border-amber-200 bg-amber-50 shadow-sm",
+      doubleCountingRisk: "Medium",
+      operationalControl: "Alongside Vessel Boundary",
+      sellerScope3Category: "Category 9: Downstream (Transport alongside ship)",
+      buyerScope3Category: "Category 4: Upstream (Loading, Stowage & Freight)",
+      csrdMateriality: "Boundary splits alongside the ship. Seller reports pre-carriage to harbor terminal under Scope 3. Buyer reports loading crane emissions and onward voyage.",
+      esrsDisclosureRequired: "Scope 3 Category 9 (Seller local pre-carriage to port) and Scope 3 Category 4 (Buyer maritime loading + shipping).",
+      auditActionSeller: "Document terminal tractor or port transit vehicle emissions used for delivery to ship-side.",
+      auditActionBuyer: "Verify if terminal loading lift carbon is reported under Buyer Scope 3 Cat 4 or port Scope 1/2.",
+      sellerRoleDetails: "Tracks transport up to port berth alongside the named vessel.",
+      buyerRoleDetails: "Tracks loading energy (cranes) and all ocean carrier voyage metrics.",
+      regulatoryStandard: "GHG Protocol Scope 3 Port Operations"
+    },
+    'FOB': {
+      rating: "On-Board Boundary Split",
+      ratingColor: "text-blue-800 border-blue-200 bg-blue-50 shadow-sm",
+      doubleCountingRisk: "Medium",
+      operationalControl: "Vessel Rail Boundary",
+      sellerScope3Category: "Category 9: Downstream (Pre-carriage & Loading)",
+      buyerScope3Category: "Category 4: Upstream (International Transport)",
+      csrdMateriality: "Handover is completed when goods are safely on board. Under CSRD, Seller accounts for harbor logistics and loading lifting power. Buyer is liable forward from the port departure.",
+      esrsDisclosureRequired: "Scope 3 Category 9 for pre-onboard leg; Scope 3 Category 4 for international maritime bunkering.",
+      auditActionSeller: "Isolate lifting hook / crane carbon impact at port under Scope 3 Category 9.",
+      auditActionBuyer: "Obtain clean ocean freight bunker reports for standard Category 4 accounting.",
+      sellerRoleDetails: "Tracks transit to port and loading crane power emissions.",
+      buyerRoleDetails: "Tracks major marine bunker emissions from origin port to destination.",
+      regulatoryStandard: "ESRS E1 Boundary Alignment"
+    },
+    'CFR': {
+      rating: "High Risk of Double Counting",
+      ratingColor: "text-red-800 border-red-200 bg-red-50 shadow-sm",
+      doubleCountingRisk: "Critical",
+      operationalControl: "Seller Contracted / Buyer Risk",
+      sellerScope3Category: "Category 9: Downstream (Seller pays & contracts freight)",
+      buyerScope3Category: "Category 4: Upstream (Risk transferred at origin)",
+      csrdMateriality: "Under ESRS E1, CFR represents a major audit friction. Since Seller pays the freight but risk belongs to the Buyer during transit, both parties frequently report the ocean carriage. Clear contractual separation is required.",
+      esrsDisclosureRequired: "Double materiality declaration under ESRS 2 IRO-1 to reconcile who accounts for ocean carriage fuel.",
+      auditActionSeller: "Provide actual maritime carrier emission statements to the Buyer with 'Single Occupancy' declaration.",
+      auditActionBuyer: "Ensure Buyer does not report transport Scope 3 Cat 4 if already included in Seller's Scope 3 Cat 9 reports, or coordinate dual-reporting exclusions.",
+      sellerRoleDetails: "Contracts main vessel. Must report ocean voyage under down-stream scope 3.",
+      buyerRoleDetails: "Risk transfers at vessel rail. Must manage marine cargo safety, but avoids financial booking carbon reporting if properly structured.",
+      regulatoryStandard: "CSRD ESRS E1 Double Materiality Guidance"
+    },
+    'CIF': {
+      rating: "High Risk of Double Counting",
+      ratingColor: "text-red-800 border-red-200 bg-red-50 shadow-sm",
+      doubleCountingRisk: "Critical",
+      operationalControl: "Seller Contracted & Insured / Buyer Risk",
+      sellerScope3Category: "Category 9: Downstream (Contracts freight & insurance)",
+      buyerScope3Category: "Category 4: Upstream (Risk transferred at origin)",
+      csrdMateriality: "Identical to CFR double-counting friction. Under CSRD, insurance procurement does not alter the carbon boundary, but Seller must verify carbon footprint of transport of goods to prevent Buyer duplicate filings.",
+      esrsDisclosureRequired: "Scope 3 Category 9 emissions matching international marine transit plus verification of green insurance underwriting.",
+      auditActionSeller: "Request actual vessel IMO emission logs for period of transit to share with the Buyer's ESG audit team.",
+      auditActionBuyer: "Create structured GHG accounting policies stating C-term shipping carbon fallback reporting methods.",
+      sellerRoleDetails: "Contracts ocean freight and insurance. Must track downstream logistics footprint.",
+      buyerRoleDetails: "Responsible for carbon tracking inside final import port customs and final leg.",
+      regulatoryStandard: "GHG Protocol Category 9 Downstream Guidance"
+    },
+    'CPT': {
+      rating: "Multimodal Cost-Split Friction",
+      ratingColor: "text-amber-800 border-amber-200 bg-amber-50 shadow-sm",
+      doubleCountingRisk: "High",
+      operationalControl: "Seller Contracted / First Carrier Risk",
+      sellerScope3Category: "Category 9: Downstream (Paid to Named Place)",
+      buyerScope3Category: "Category 4: Upstream (Risk transferred at First Carrier)",
+      csrdMateriality: "For inland and air multimodal freight. Seller books main carrier, tracking carbon as Category 9 under CSRD. Buyer assumes risk at first carrier, meaning both must verify financial control definitions to align audit files.",
+      esrsDisclosureRequired: "Full emissions tracking of multimodal waybills, mapped across rail, flight and road networks.",
+      auditActionSeller: "Disclose complete air/rail/truck waybill emissions directly to Buyer under ESG compliance agreements.",
+      auditActionBuyer: "Audit carrier sheets. If cost is bundled in product invoice, report under Category 1 (Purchased Goods) to prevent Scope 3 Cat 4 overlap.",
+      sellerRoleDetails: "Pays and tracks multi-modal carriage up to the nominated destination point.",
+      buyerRoleDetails: "Tracks destination handling, unpacking, and final drayage leg carbon.",
+      regulatoryStandard: "GHG Corporate Value Chain Standard"
+    },
+    'CIP': {
+      rating: "Multimodal Cost-Split Friction",
+      ratingColor: "text-amber-800 border-amber-200 bg-amber-50 shadow-sm",
+      doubleCountingRisk: "High",
+      operationalControl: "Seller Contracted & Insured / First Carrier Risk",
+      sellerScope3Category: "Category 9: Downstream (Paid to Named Place)",
+      buyerScope3Category: "Category 4: Upstream (Risk transferred at First Carrier)",
+      csrdMateriality: "Requires detailed Scope 3 reporting. Seller books transport and maps carbon footprints under Category 9. Under CSRD, insurance criteria must align with material ESG risk disclosures.",
+      esrsDisclosureRequired: "High-level Scope 3 Category 9 multimodal transport footprint coupled with ESG insurance audits.",
+      auditActionSeller: "Establish routine computerized emission-reporting APIs with the multimodal cargo forwarders.",
+      auditActionBuyer: "Incorporate Seller-provided freight emission data directly into ESRS Scope 3 disclosures.",
+      sellerRoleDetails: "Procures full transit and all-risk cover. Customarily tracks whole travel emission.",
+      buyerRoleDetails: "Saves tracking costs by sourcing carbon logs directly from Seller's logistics dashboard.",
+      regulatoryStandard: "ESRS E1-6 Scope 3 Multimodal Data"
+    },
+    'DAP': {
+      rating: "Seller-Led Delivery Alignment",
+      ratingColor: "text-emerald-800 border-emerald-200 bg-emerald-50 shadow-sm",
+      doubleCountingRisk: "Low",
+      operationalControl: "95% Seller Controlled End-to-End",
+      sellerScope3Category: "Category 9: Downstream (End-to-End Transit)",
+      buyerScope3Category: "Category 1: Purchased Goods (No local transit ownership)",
+      csrdMateriality: "Under CSRD, Seller must track and disclose the full cross-border transport footprint up to named destination. Buyer has zero transport operational control, simplifying their Scope 3 reporting considerably.",
+      esrsDisclosureRequired: "Downstream emission disclosures for Seller; zero-liability transit reporting for Buyer except local yard handling.",
+      auditActionSeller: "Validate carrier fuel logs, route efficiencies, and multi-modal transfer emissions for the entire trip.",
+      auditActionBuyer: "Ensure zero transport emissions are claimed in Scope 3 Cat 4; simply account for local warehouse unloading power.",
+      sellerRoleDetails: "Bears 100% of transit emissions responsibility. Must supply verified data for CSRD.",
+      buyerRoleDetails: "Reports only local, point-of-delivery emissions. High audit simplicity.",
+      regulatoryStandard: "CSRD ESRS E1 Reporting Boundaries"
+    },
+    'DPU': {
+      rating: "Seller-Led Delivery & Unloading",
+      ratingColor: "text-emerald-800 border-emerald-200 bg-emerald-50 shadow-sm",
+      doubleCountingRisk: "Low",
+      operationalControl: "100% Seller Controlled (Unloaded)",
+      sellerScope3Category: "Category 9: Downstream (Transit & Unloading Emissions)",
+      buyerScope3Category: "Category 1: Purchased Goods (Post-delivery Storage)",
+      csrdMateriality: "Seller is responsible for whole logistics including unloading. Seller accounts for heavy crane or forklift fuel burn at destination. Extremely light ESG reporting requirement for the Buyer.",
+      esrsDisclosureRequired: "Carbon metrics for travel, domestic logistics, port drayage, and terminal unloading machinery.",
+      auditActionSeller: "Track actual fuel burn and power consumption of unloading machinery at destination port/facility.",
+      auditActionBuyer: "Record simple Scope 1/2 from final storage onwards.",
+      sellerRoleDetails: "Tracks complete travel and physical unloading energy footprint.",
+      buyerRoleDetails: "Receives goods fully delivered and unloaded; zero transit emission liability.",
+      regulatoryStandard: "GHG Protocol Lifecycle Accounting"
+    },
+    'DDP': {
+      rating: "Maximum Seller ESG Accountability",
+      ratingColor: "text-emerald-800 border-emerald-200 bg-emerald-50 shadow-sm",
+      doubleCountingRisk: "Low",
+      operationalControl: "100% Seller Controlled (Transit & Customs Clearance)",
+      sellerScope3Category: "Category 9: Downstream (Total Logistics & Duties)",
+      buyerScope3Category: "Category 1: Purchased Goods (Door-delivered)",
+      csrdMateriality: "Under CSRD and GHG Protocol, DDP completely isolates the Buyer from logistics carbon. Seller is legally and operationally liable for reporting emissions of international transport, customs transit, and terminal tasks directly.",
+      esrsDisclosureRequired: "Scope 3 Category 9 including double customs clearances and all local onward trucking emissions.",
+      auditActionSeller: "Conduct rigorous audit of custom house transport agents and domestic shipping fleets. Report fully under ESRS E1.",
+      auditActionBuyer: "Ensure standard product sourcing ESG files reference Seller's DDP emissions. Report transit under Cat 1 only.",
+      sellerRoleDetails: "Handles all export, ocean, import, custom transit, and final door-delivery logistics carbon.",
+      buyerRoleDetails: "Enjoys perfect audit passivity. Zero direct transport carbon reporting required.",
+      regulatoryStandard: "ESRS E1 Integrated Sourcing Framework"
+    }
+  };
+
+  return data[code] || defaults;
+};
+
+
 type TabType = 'incoterms' | 'sustainability' | 'compliance' | 'all';
 type ViewMode = 'hub' | 'detail';
 
@@ -861,77 +1196,588 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
 
                   <div className={`${(activeTab === 'all' || activeTab === 'sustainability') ? 'block' : 'hidden print:block'} ${isPrintingReport ? 'print:hidden' : ''}`}>
                     {/* Sustainability Section */}
-                    <section className="bg-slate-900 border border-slate-800 rounded-[2.5rem] p-10 shadow-2xl space-y-12 relative overflow-hidden">
-                       <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+                    <section className="bg-emerald-50/70 border border-emerald-100 rounded-[2.5rem] p-10 shadow-sm space-y-12 relative overflow-hidden text-emerald-950">
+                       <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
                        
-                       <div className="flex justify-between items-center relative z-10">
-                        <h3 className="flex items-center gap-3 text-white font-black text-2xl">
-                          <Leaf className="text-emerald-400" size={28} />
-                          Sustainability & Carbon Control
-                        </h3>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">GHG Protocol Allocation</span>
+                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-emerald-100 pb-6 relative z-10">
+                        <div>
+                          <h3 className="flex items-center gap-3 text-emerald-950 font-black text-2xl">
+                            <Leaf className="text-emerald-600" size={28} />
+                            Sustainability & Carbon Control
+                          </h3>
+                          <p className="text-[11px] text-emerald-800 font-medium italic mt-1">
+                            Operational & Financial carbon boundary mapping under international ESG disclosures.
+                          </p>
+                        </div>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 px-3.5 py-1.5 bg-white border border-emerald-100 rounded-xl shadow-sm">
+                          GHG Protocol & CSRD (ESRS E1) Directive
+                        </span>
                       </div>
 
-                      <div className="space-y-8 relative z-10">
-                        <div className="space-y-4 relative">
+                      {/* Carbon Control Allocation Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                        {/* Seller Carbon Control */}
+                        <div className="bg-white border border-emerald-100 p-6 rounded-3xl space-y-4 shadow-sm">
                           <div className="flex justify-between items-end">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">Seller Carbon Control</span>
-                            <span className="text-2xl font-black text-blue-400">{info.sellerCarbonControl}%</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-2.5 h-2.5 bg-blue-500 rounded-full" />
+                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">Seller Carbon Control</span>
+                            </div>
+                            <span className="text-2xl font-black text-emerald-950">{info.sellerCarbonControl}%</span>
                           </div>
-                          <div className="h-6 w-full bg-slate-800 rounded-full overflow-hidden border-2 border-slate-700 shadow-inner">
+                          <div className="h-4 w-full bg-emerald-50 rounded-full overflow-hidden border border-emerald-100 p-0.5">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${info.sellerCarbonControl}%` }}
                               transition={{ delay: 0.8, duration: 1.5 }}
-                              className="h-full bg-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.3)]"
+                              className="h-full bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.3)]"
                             />
                           </div>
+                          <p className="text-[10px] text-slate-600 leading-relaxed font-semibold">
+                            {getGhgCsrdDetails(code).sellerRoleDetails}
+                          </p>
                         </div>
 
-                        <div className="space-y-4 relative">
+                        {/* Buyer Carbon Control */}
+                        <div className="bg-white border border-emerald-100 p-6 rounded-3xl space-y-4 shadow-sm">
                           <div className="flex justify-between items-end">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">Buyer Carbon Control</span>
-                            <span className="text-2xl font-black text-orange-400">{info.buyerCarbonControl}%</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-2.5 h-2.5 bg-orange-500 rounded-full" />
+                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">Buyer Carbon Control</span>
+                            </div>
+                            <span className="text-2xl font-black text-emerald-950">{info.buyerCarbonControl}%</span>
                           </div>
-                          <div className="h-6 w-full bg-slate-800 rounded-full overflow-hidden border-2 border-slate-700 shadow-inner">
+                          <div className="h-4 w-full bg-emerald-50 rounded-full overflow-hidden border border-emerald-100 p-0.5">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${info.buyerCarbonControl}%` }}
                               transition={{ delay: 1, duration: 1.5 }}
-                              className="h-full bg-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.3)]"
+                              className="h-full bg-orange-500 rounded-full shadow-[0_0_15px_rgba(249,115,22,0.3)]"
                             />
                           </div>
+                          <p className="text-[10px] text-slate-600 leading-relaxed font-semibold">
+                            {getGhgCsrdDetails(code).buyerRoleDetails}
+                          </p>
                         </div>
                       </div>
 
-                      <div className="pt-8 border-t border-slate-800 space-y-6 relative z-10">
+                      {/* Segmentation */}
+                      <div className="pt-4 space-y-6 relative z-10">
                         <div className="flex justify-between items-center">
-                          <h4 className="text-slate-400 font-bold text-sm">GHG Protocol Scope 3 Segmentation</h4>
-                          <span className="text-slate-600"><Info size={16} /></span>
+                          <h4 className="text-emerald-900 font-bold text-sm">GHG Protocol Scope 3 Category Breakdown</h4>
+                          <span className="text-emerald-600"><Info size={16} /></span>
                         </div>
                         
-                        <div className="h-8 w-full bg-slate-800 rounded-xl overflow-hidden flex border border-slate-700 shadow-inner">
-                          {info.scope3Allocation.map((segment, i) => (
-                            <motion.div
-                              key={i}
-                              initial={{ width: 0 }}
-                              animate={{ width: `${segment.percentage}%` }}
-                              transition={{ delay: 1.2 + (i * 0.2) }}
-                              className={`${segment.color} h-full relative group cursor-help`}
-                            >
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                            </motion.div>
-                          ))}
+                        <div className="relative pt-12 pb-2">
+                          {/* Precise Carbon Handover Pin Pinpointed exactly at info.sellerCarbonControl% */}
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1, left: `${info.sellerCarbonControl}%` }}
+                            transition={{ delay: 1, type: "spring" }}
+                            className="absolute top-1/2 -translate-y-1/2 -ml-4 w-8 h-8 bg-white border-4 border-emerald-600 rounded-full shadow-2xl z-20 flex items-center justify-center cursor-pointer"
+                            whileHover={{ scale: 1.15 }}
+                          >
+                            <div className="w-2.5 h-2.5 bg-emerald-600 rounded-full animate-pulse" />
+                            <div className="absolute bottom-1/2 left-1/2 -translate-x-1/2 w-0.5 h-14 bg-emerald-600/70 -z-10" />
+                            
+                            {/* Floating elegant tooltip pointing down to the handover point */}
+                            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2.5 rounded-2xl text-[10px] font-black tracking-widest uppercase whitespace-nowrap shadow-2xl border border-white/10 text-center z-35">
+                              <div className="text-emerald-400 text-[8px] font-black uppercase tracking-[0.2em] mb-0.5">Carbon Control Transfer</div>
+                              {info.transferPoint}
+                              <div className="text-[12px] leading-tight normal-case font-black mt-0.5 text-emerald-300 font-sans tracking-wide">
+                                Handover Point
+                              </div>
+                              <div className="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-slate-900" />
+                            </div>
+                          </motion.div>
+
+                          {/* The break down allocation segments */}
+                          <div className="h-8 w-full bg-slate-100 rounded-xl overflow-hidden flex border border-emerald-100 shadow-inner relative z-10">
+                            {info.scope3Allocation.map((segment, i) => (
+                              <motion.div
+                                key={i}
+                                initial={{ width: 0 }}
+                                animate={{ width: `${segment.percentage}%` }}
+                                transition={{ delay: 1.2 + (i * 0.2) }}
+                                className={`${segment.color} h-full relative group cursor-help`}
+                                title={`${segment.label}: ${segment.percentage}%`}
+                              >
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                              </motion.div>
+                            ))}
+                          </div>
                         </div>
 
                         <div className="flex flex-wrap gap-6">
                           {info.scope3Allocation.map((segment, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                               <div className={`w-3 h-3 rounded-full ${segment.color}`} />
-                               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{segment.label} ({segment.percentage}%)</span>
+                            <div key={i} className="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-xl border border-emerald-100 shadow-sm">
+                                <div className={`w-3 h-3 rounded-full ${segment.color}`} />
+                                <span className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{segment.label} ({segment.percentage}%)</span>
                             </div>
                           ))}
                         </div>
+                      </div>
+
+                      {/* CSRD Regulations and GHG Alignment Deep-Dive */}
+                      <div className="pt-8 border-t border-emerald-100 space-y-8 relative z-10">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                          <div>
+                            <h4 className="text-sm font-black uppercase tracking-widest text-emerald-900">
+                              CSRD Compliance & Audit Roadmap
+                            </h4>
+                            <p className="text-[11px] text-emerald-800 font-semibold italic">
+                              A simplified 3-step operational map for greenhouse gas accounting.
+                            </p>
+                          </div>
+                          <div className={`px-4 py-2 border rounded-xl text-[9px] font-black uppercase tracking-widest ${getGhgCsrdDetails(code).ratingColor}`}>
+                            {getGhgCsrdDetails(code).rating}
+                          </div>
+                        </div>
+
+                        {/* 3-Step Infographic Flow */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+                          
+                          {/* Step 1: Boundary Setup */}
+                          <div className="bg-white border border-emerald-100 rounded-[2rem] p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-emerald-200">
+                            <div className="absolute -top-4 -left-4 w-12 h-12 bg-emerald-50 rounded-br-3xl flex items-center justify-center font-black text-xs text-emerald-800 border-r border-b border-emerald-100/50">
+                              01
+                            </div>
+                            <div className="pt-4">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="p-2 rounded-xl bg-emerald-50 text-emerald-800">
+                                  <LayoutGrid size={16} />
+                                </div>
+                                <h5 className="font-extrabold text-sm uppercase tracking-wide text-slate-900">Boundary & Control</h5>
+                              </div>
+                              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Operational Control</p>
+                              <div className="text-sm font-extrabold text-slate-900 mb-2">{getGhgCsrdDetails(code).operationalControl}</div>
+                              <p className="text-[10px] text-slate-600 leading-tight">
+                                Identifies which counterparty controls the fuel burn logistics and owns Scope 3 direct bookings.
+                              </p>
+                            </div>
+                            <div className="mt-5 pt-3 border-t border-slate-50 text-[10px] font-bold">
+                              <span className="text-slate-400 uppercase tracking-widest text-[8px] block mb-0.5">ESG Standard Set</span>
+                              <span className="text-emerald-800 font-black">{getGhgCsrdDetails(code).regulatoryStandard}</span>
+                            </div>
+                          </div>
+
+                          {/* Step 2: Risk Check */}
+                          <div className="bg-white border border-emerald-100 rounded-[2rem] p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-emerald-200">
+                            <div className="absolute -top-4 -left-4 w-12 h-12 bg-emerald-50 rounded-br-3xl flex items-center justify-center font-black text-xs text-emerald-800 border-r border-b border-emerald-100/50">
+                              02
+                            </div>
+                            <div className="pt-4">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="p-2 rounded-xl bg-amber-50 text-amber-800">
+                                  <ShieldCheck size={16} />
+                                </div>
+                                <h5 className="font-extrabold text-sm uppercase tracking-wide text-slate-900">Risk Assessment</h5>
+                              </div>
+                              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Double-Counting Threat</p>
+                              
+                              <div className="my-2 flex items-center gap-2">
+                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[9px] font-black uppercase tracking-wider border ${getGhgCsrdDetails(code).ratingColor}`}>
+                                  <RefreshCcw size={8} /> {getGhgCsrdDetails(code).doubleCountingRisk} RISK
+                                </span>
+                              </div>
+                              <p className="text-[10px] text-slate-600 leading-tight">
+                                Audits whether duplicate Scope 3 carbon entries might exist under overlapping transportation legs.
+                              </p>
+                            </div>
+                            <div className="mt-5 pt-3 border-t border-slate-50 text-[10px] font-bold">
+                              <span className="text-slate-400 uppercase tracking-widest text-[8px] block mb-0.5">Audit Evaluation</span>
+                              <span className="text-slate-700 italic font-black">Carbon balance sheet reconciled</span>
+                            </div>
+                          </div>
+
+                          {/* Step 3: Compliance & Reporting */}
+                          <div className="bg-white border border-emerald-100 rounded-[2rem] p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-emerald-200">
+                            <div className="absolute -top-4 -left-4 w-12 h-12 bg-emerald-50 rounded-br-3xl flex items-center justify-center font-black text-xs text-emerald-800 border-r border-b border-emerald-100/50">
+                              03
+                            </div>
+                            <div className="pt-4">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="p-2 rounded-xl bg-blue-50 text-blue-800">
+                                  <Lock size={16} />
+                                </div>
+                                <h5 className="font-extrabold text-sm uppercase tracking-wide text-slate-900">Audit execution</h5>
+                              </div>
+                              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">CSRD Disclosure Limit</p>
+                              <div className="text-[11px] leading-snug text-slate-800 font-extrabold line-clamp-3">
+                                {getGhgCsrdDetails(code).csrdMateriality}
+                              </div>
+                            </div>
+                            <div className="mt-5 pt-3 border-t border-slate-50 text-[10px] font-extrabold">
+                              <span className="text-slate-400 uppercase tracking-widest text-[8px] block mb-0.5">ESRS Primary Focus</span>
+                              <span className="text-blue-800 block truncate">{getGhgCsrdDetails(code).esrsDisclosureRequired}</span>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        {/* Audit Readiness Actions - Unified Visual Checklist */}
+                        <div className="p-6 bg-emerald-50/40 border border-emerald-100 rounded-3xl space-y-4">
+                          <h5 className="text-[10px] font-black uppercase tracking-widest text-emerald-900 flex items-center gap-1.5">
+                            <Shield size={12} className="text-emerald-700" /> CSRD Action Checklist by Inbound Role
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Seller role block */}
+                            <div className="bg-white/80 border border-slate-100 rounded-2xl p-4 space-y-2">
+                              <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                                <span className="text-[9px] font-black uppercase tracking-wider text-blue-950">Seller Action Plan</span>
+                              </div>
+                              <p className="text-xs font-black text-slate-900 leading-tight">
+                                {getGhgCsrdDetails(code).auditActionSeller}
+                              </p>
+                              <div className="text-[9px] text-slate-500 font-semibold uppercase">
+                                <span className="text-[8px] text-slate-400 block tracking-widest leading-none">Category Target</span>
+                                {getGhgCsrdDetails(code).sellerScope3Category}
+                              </div>
+                            </div>
+
+                            {/* Buyer role block */}
+                            <div className="bg-white/80 border border-slate-100 rounded-2xl p-4 space-y-2">
+                              <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-orange-600" />
+                                <span className="text-[9px] font-black uppercase tracking-wider text-orange-950">Buyer Action Plan</span>
+                              </div>
+                              <p className="text-xs font-black text-slate-900 leading-tight">
+                                {getGhgCsrdDetails(code).auditActionBuyer}
+                              </p>
+                              <div className="text-[9px] text-slate-500 font-semibold uppercase">
+                                <span className="text-[8px] text-slate-400 block tracking-widest leading-none">Category Target</span>
+                                {getGhgCsrdDetails(code).buyerScope3Category}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Sustainability Insights lists */}
+                        <div className="space-y-4 pt-6 border-t border-emerald-100 bg-emerald-100/20 rounded-3xl p-6">
+                          <h4 className="text-xs font-black uppercase tracking-widest text-emerald-900">
+                            Practical Carbon Reduction Recommendations
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {info.sustainabilityInsights.map((insight, i) => (
+                              <div 
+                                key={i} 
+                                className={`p-4 rounded-2xl border text-[11px] leading-relaxed font-bold shadow-sm ${
+                                  insight.type === 'tip' ? 'bg-emerald-50 border-emerald-100 text-emerald-900' :
+                                  insight.type === 'warning' ? 'bg-amber-50 border-amber-200 text-amber-900' :
+                                  insight.type === 'danger' ? 'bg-red-50 border-red-200 text-red-900' :
+                                  'bg-white border-slate-100 text-slate-800'
+                                }`}
+                              >
+                                <span className="uppercase text-[8px] tracking-widest font-black block opacity-60 mb-1">
+                                  {insight.type === 'tip' ? '🌱 Eco Recommendation' : insight.type}
+                                </span>
+                                {insight.text}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Greener Incoterm Suggestion Section */}
+                        <div className="pt-8 border-t border-emerald-100 space-y-6">
+                          <div>
+                            <h4 className="text-sm font-black uppercase tracking-widest text-emerald-900 flex items-center gap-2">
+                              <span>🌿</span> Greener Incoterm Recommendations
+                            </h4>
+                            <p className="text-[11px] text-emerald-800 font-semibold italic mt-0.5">
+                              Strategic ESG & carbon footprint optimization pathways, mapped separately for Buyer and Seller logistics roles.
+                            </p>
+                          </div>
+
+                          {(() => {
+                             const splitSuggestion = getGreenerSuggestionsSeparate(code);
+                             const hasBuyerOpts = splitSuggestion.buyerSuggestions.length > 0;
+                             const hasSellerOpts = splitSuggestion.sellerSuggestions.length > 0;
+
+                             const getTableMetricsForCode = (itemCode: string) => {
+                               const codeUpper = itemCode.toUpperCase();
+                               
+                               // Criteria 1: CSRD Data Visibility
+                               let csrdDataVisibility: 'HIGH' | 'MEDIUM' | 'LOW' = 'MEDIUM';
+                               if (['DAP', 'DDP', 'DPU', 'CPT', 'CIP'].includes(codeUpper)) {
+                                 csrdDataVisibility = 'HIGH';
+                               } else if (['EXW', 'FAS'].includes(codeUpper)) {
+                                 csrdDataVisibility = 'LOW';
+                               }
+
+                               // Criteria 2: Carbon Accountability
+                               let carbonAccountability: 'Seller Accountable' | 'Shared' | 'Buyer Accountable' = 'Shared';
+                               if (['DAP', 'DDP', 'DPU', 'CPT', 'CIP'].includes(codeUpper)) {
+                                 carbonAccountability = 'Seller Accountable';
+                               } else if (['EXW', 'FAS'].includes(codeUpper)) {
+                                 carbonAccountability = 'Buyer Accountable';
+                               }
+
+                               const incData = INCOTERMS[codeUpper];
+                               return {
+                                 code: itemCode,
+                                 csrdDataVisibility,
+                                 carbonAccountability,
+                                 buyerControl: incData ? incData.buyerCarbonControl : 50,
+                                 sellerControl: incData ? incData.sellerCarbonControl : 50
+                               };
+                             };
+
+                             const buyerFilteredCodes = [code, ...splitSuggestion.buyerSuggestions.map(s => s.code)];
+                             const sellerFilteredCodes = [code, ...splitSuggestion.sellerSuggestions.map(s => s.code)];
+
+                             const buyerComparisonData = buyerFilteredCodes.map(c => getTableMetricsForCode(c));
+                             const sellerComparisonData = sellerFilteredCodes.map(c => getTableMetricsForCode(c));
+
+                             return (
+                               <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-stretch pt-2">
+                                 {/* CARD 1: BUYER ESG OPTIMIZATION PATHWAY */}
+                                 <div className="bg-white border border-emerald-100/90 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between space-y-6">
+                                   <div className="space-y-4">
+                                     <div className="flex items-center justify-between border-b border-emerald-50 pb-3">
+                                       <div className="flex flex-col">
+                                         <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800 flex items-center gap-1.5">
+                                           👤 BUYER ESG PATHWAY OPTIMIZATION
+                                         </span>
+                                         <span className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">
+                                           Transition path to closest, analogous greener Selection
+                                         </span>
+                                       </div>
+                                       <span className="text-[9px] bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-full font-black">
+                                         {splitSuggestion.buyerSuggestions.length} Recommendations
+                                       </span>
+                                     </div>
+
+                                     {hasBuyerOpts ? (
+                                       <div className="space-y-3">
+                                         {splitSuggestion.buyerSuggestions.map((item) => (
+                                           <div key={item.code} className="border border-emerald-100 bg-emerald-50/20 rounded-2xl p-4 space-y-1">
+                                             <div className="flex items-center justify-between">
+                                               <span className="text-xs font-black text-emerald-950 font-mono">
+                                                 Transition {code} &rarr; {item.code}
+                                               </span>
+                                               <span className="text-[8px] font-black bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded uppercase font-bold">
+                                                 Closest Analogy
+                                               </span>
+                                             </div>
+                                             <p className="text-[11px] text-slate-600 leading-relaxed font-bold">
+                                               {item.reason}
+                                             </p>
+                                           </div>
+                                         ))}
+                                       </div>
+                                     ) : (
+                                       <div className="h-32 border border-dashed border-slate-200 rounded-3xl flex items-center justify-center p-4 bg-slate-50/40 text-center">
+                                         <p className="text-[10px] font-bold text-slate-400">
+                                           Your selected Incoterm ({code}) already offers the optimal direct logistics oversight and reporting boundaries for high-compliance buyers.
+                                         </p>
+                                       </div>
+                                     )}
+                                   </div>
+
+                                   {/* Buyer Table */}
+                                   <div className="space-y-3 pt-4 border-t border-slate-50">
+                                     <div className="flex items-center justify-between">
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-emerald-900 block font-bold">
+                                         Buyer Comparative Matrix
+                                       </span>
+                                       <span className="text-[8px] font-black text-emerald-800 uppercase bg-emerald-50 px-2 py-0.5 rounded-full">
+                                         Filtered Results
+                                       </span>
+                                     </div>
+
+                                     <div className="border border-slate-100 rounded-2xl overflow-hidden shadow-sm bg-slate-50/10">
+                                       <table className="w-full text-left border-collapse">
+                                         <thead>
+                                           <tr className="border-b border-slate-100 bg-slate-100/50">
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">Incoterm</th>
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">CSRD Data Visibility</th>
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">Carbon Accountability</th>
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">Transport Responsibility Split</th>
+                                           </tr>
+                                         </thead>
+                                         <tbody className="divide-y divide-slate-100 bg-white">
+                                           {buyerComparisonData.map((item) => {
+                                             const isCurrent = item.code === code;
+                                             return (
+                                               <tr 
+                                                 key={item.code}
+                                                 className={`transition-colors duration-150 ${
+                                                   isCurrent 
+                                                     ? 'bg-emerald-500/[0.02] border-l-4 border-l-emerald-600 font-bold' 
+                                                     : 'hover:bg-slate-50 border-l-4 border-l-slate-200'
+                                                 }`}
+                                               >
+                                                 <td className="px-3 py-2">
+                                                   <div className="flex flex-col">
+                                                     <span className={`text-xs font-black ${isCurrent ? 'text-emerald-950 font-black' : 'text-slate-700 font-mono'}`}>
+                                                       {item.code}
+                                                     </span>
+                                                     <span className="text-[6px] font-black uppercase tracking-wider text-slate-400">
+                                                       {isCurrent ? 'Active Selection' : 'Recommendation'}
+                                                     </span>
+                                                   </div>
+                                                 </td>
+                                                 <td className="px-3 py-2">
+                                                   <span className={`inline-block px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-wider border ${
+                                                     item.csrdDataVisibility === 'HIGH' ? 'bg-emerald-500/10 text-emerald-700 border-emerald-300/30' :
+                                                     item.csrdDataVisibility === 'MEDIUM' ? 'bg-amber-500/10 text-amber-700 border-amber-300/30' :
+                                                     'bg-slate-100 text-slate-500 border-slate-200'
+                                                   }`}>
+                                                     {item.csrdDataVisibility}
+                                                   </span>
+                                                 </td>
+                                                 <td className="px-3 py-2">
+                                                   <span className={`inline-block px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-wider border ${
+                                                     item.carbonAccountability === 'Seller Accountable' ? 'bg-indigo-500/10 text-indigo-700 border-indigo-300/30' :
+                                                     item.carbonAccountability === 'Shared' ? 'bg-purple-500/10 text-purple-700 border-purple-300/30' :
+                                                     'bg-orange-500/10 text-orange-700 border-orange-300/30'
+                                                   }`}>
+                                                     {item.carbonAccountability}
+                                                   </span>
+                                                 </td>
+                                                 <td className="px-3 py-2">
+                                                   <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono tracking-tight font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                                                     B: <span className="font-extrabold text-slate-950">{item.buyerControl}%</span> / S: <span className="font-extrabold text-slate-950">{item.sellerControl}%</span>
+                                                   </span>
+                                                 </td>
+                                               </tr>
+                                             );
+                                           })}
+                                         </tbody>
+                                       </table>
+                                     </div>
+                                   </div>
+                                 </div>
+
+                                 {/* CARD 2: SELLER ESG OPTIMIZATION PATHWAY */}
+                                 <div className="bg-white border border-blue-100/90 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between space-y-6">
+                                   <div className="space-y-4">
+                                     <div className="flex items-center justify-between border-b border-blue-50 pb-3">
+                                       <div className="flex flex-col">
+                                         <span className="text-[10px] font-black uppercase tracking-widest text-blue-800 flex items-center gap-1.5 font-bold">
+                                           🏢 SELLER ESG PATHWAY OPTIMIZATION
+                                         </span>
+                                         <span className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">
+                                           Transition path to closest, analogous greener Selection
+                                         </span>
+                                       </div>
+                                       <span className="text-[9px] bg-blue-50 text-blue-800 px-2.5 py-1 rounded-full font-black">
+                                         {splitSuggestion.sellerSuggestions.length} Recommendations
+                                       </span>
+                                     </div>
+
+                                     {hasSellerOpts ? (
+                                       <div className="space-y-3">
+                                         {splitSuggestion.sellerSuggestions.map((item) => (
+                                           <div key={item.code} className="border border-blue-100 bg-blue-50/20 rounded-2xl p-4 space-y-1">
+                                             <div className="flex items-center justify-between">
+                                               <span className="text-xs font-black text-blue-950 font-mono">
+                                                 Transition {code} &rarr; {item.code}
+                                               </span>
+                                               <span className="text-[8px] font-black bg-blue-100 text-blue-900 px-1.5 py-0.5 rounded uppercase font-bold">
+                                                 Closest Analogy
+                                               </span>
+                                             </div>
+                                             <p className="text-[11px] text-slate-600 leading-relaxed font-bold">
+                                               {item.reason}
+                                             </p>
+                                           </div>
+                                         ))}
+                                       </div>
+                                     ) : (
+                                       <div className="h-32 border border-dashed border-slate-200 rounded-3xl flex items-center justify-center p-4 bg-slate-50/40 text-center">
+                                         <p className="text-[10px] font-bold text-slate-400">
+                                           Peak posture reached or maximum transport custody delegated. No additional carbon-leveraging options apply to the Seller.
+                                         </p>
+                                       </div>
+                                     )}
+                                   </div>
+
+                                   {/* Seller Table */}
+                                   <div className="space-y-3 pt-4 border-t border-slate-50">
+                                     <div className="flex items-center justify-between">
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-blue-900 block font-bold">
+                                         Seller Comparative Matrix
+                                       </span>
+                                       <span className="text-[8px] font-black text-blue-800 uppercase bg-blue-50 px-2 py-0.5 rounded-full">
+                                         Filtered Results
+                                       </span>
+                                     </div>
+
+                                     <div className="border border-slate-100 rounded-2xl overflow-hidden shadow-sm bg-slate-50/10">
+                                       <table className="w-full text-left border-collapse">
+                                         <thead>
+                                           <tr className="border-b border-slate-100 bg-slate-100/50">
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">Incoterm</th>
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">CSRD Data Visibility</th>
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">Carbon Accountability</th>
+                                             <th className="px-3 py-2 text-[8px] font-black uppercase tracking-widest text-slate-400">Transport Responsibility Split</th>
+                                           </tr>
+                                         </thead>
+                                         <tbody className="divide-y divide-slate-100 bg-white">
+                                           {sellerComparisonData.map((item) => {
+                                             const isCurrent = item.code === code;
+                                             return (
+                                               <tr 
+                                                 key={item.code}
+                                                 className={`transition-colors duration-150 ${
+                                                   isCurrent 
+                                                     ? 'bg-blue-500/[0.02] border-l-4 border-l-blue-600 font-bold' 
+                                                     : 'hover:bg-slate-50 border-l-4 border-l-slate-200'
+                                                 }`}
+                                               >
+                                                 <td className="px-3 py-2">
+                                                   <div className="flex flex-col">
+                                                     <span className={`text-xs font-black ${isCurrent ? 'text-blue-950 font-black' : 'text-slate-700 font-mono'}`}>
+                                                       {item.code}
+                                                     </span>
+                                                     <span className="text-[6px] font-black uppercase tracking-wider text-slate-400">
+                                                       {isCurrent ? 'Active Selection' : 'Recommendation'}
+                                                     </span>
+                                                   </div>
+                                                 </td>
+                                                 <td className="px-3 py-2">
+                                                   <span className={`inline-block px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-wider border ${
+                                                     item.csrdDataVisibility === 'HIGH' ? 'bg-emerald-500/10 text-emerald-700 border-emerald-300/30' :
+                                                     item.csrdDataVisibility === 'MEDIUM' ? 'bg-amber-500/10 text-amber-700 border-amber-300/30' :
+                                                     'bg-slate-100 text-slate-500 border-slate-200'
+                                                   }`}>
+                                                     {item.csrdDataVisibility}
+                                                   </span>
+                                                 </td>
+                                                 <td className="px-3 py-2">
+                                                   <span className={`inline-block px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase tracking-wider border ${
+                                                     item.carbonAccountability === 'Seller Accountable' ? 'bg-indigo-500/10 text-indigo-700 border-indigo-300/30' :
+                                                     item.carbonAccountability === 'Shared' ? 'bg-purple-500/10 text-purple-700 border-purple-300/30' :
+                                                     'bg-orange-500/10 text-orange-700 border-orange-300/30'
+                                                   }`}>
+                                                     {item.carbonAccountability}
+                                                   </span>
+                                                 </td>
+                                                 <td className="px-3 py-2">
+                                                   <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono tracking-tight font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                                                     B: <span className="font-extrabold text-slate-950">{item.buyerControl}%</span> / S: <span className="font-extrabold text-slate-950">{item.sellerControl}%</span>
+                                                   </span>
+                                                 </td>
+                                               </tr>
+                                             );
+                                           })}
+                                         </tbody>
+                                       </table>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+                             );
+                           })()}
+
+                           {/* Disclaimer */}
+                           <p className="text-[10px] text-slate-400 font-bold italic text-center max-w-2xl mx-auto leading-relaxed">
+                             Carbon emissions depend on carrier choice and transport mode, not Incoterm alone. This analysis shows data visibility and accountability structure only.
+                           </p>
+                        </div>
+
                       </div>
                     </section>
                   </div>
