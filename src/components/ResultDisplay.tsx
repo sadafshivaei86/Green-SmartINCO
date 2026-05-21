@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Leaf, Info, Shield, Truck, Ship, Package, Globe, CheckCircle2, RefreshCcw, BarChart3, Binary, Download, LayoutGrid, ShieldCheck, Umbrella, Lock } from 'lucide-react';
+import { Leaf, Info, Shield, Truck, Ship, Package, Globe, CheckCircle2, RefreshCcw, BarChart3, Binary, Download, LayoutGrid, ShieldCheck, Umbrella, Lock, ArrowRight, Files } from 'lucide-react';
 import { INCOTERMS } from '../data/incoterms';
 
 import LegalCompliance from './LegalCompliance';
@@ -778,35 +778,260 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
               </div>
             </div>
 
-            <div className="text-center space-y-2">
-              <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Explore Analytics Context</h2>
-              <p className="text-slate-600 font-medium text-sm">Select a module for deep technical breakdown</p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { id: 'all', label: 'All Analytics', icon: LayoutGrid, color: 'text-slate-600', desc: 'Complete end-to-end perspective' },
-                { id: 'incoterms', label: 'Incoterms Analysis', icon: Shield, color: 'text-blue-600', desc: 'Transfer points & standard duties' },
-                { id: 'sustainability', label: 'Sustainability Analysis', icon: Leaf, color: 'text-emerald-600', desc: 'Scope 3 GHG protocol allocation' },
-                { id: 'compliance', label: 'Documentary Compliance', icon: Binary, color: 'text-indigo-600', desc: 'ICC standards & UCP 600 mapping' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id as TabType);
-                    setViewMode('detail');
-                  }}
-                  className="flex flex-col items-center justify-center text-center gap-6 p-8 rounded-[2.5rem] bg-slate-50 border border-slate-100 transition-all hover:bg-white hover:border-slate-900 hover:shadow-2xl hover:scale-[1.03] group"
-                >
-                  <div className={`p-5 rounded-[2rem] bg-white shadow-sm transition-all group-hover:bg-slate-900 group-hover:text-white ${tab.color}`}>
-                    <tab.icon size={32} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-black uppercase tracking-widest text-slate-900 mb-2">{tab.label}</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight leading-relaxed">{tab.desc}</p>
-                  </div>
-                </button>
-              ))}
+            {/* Redesigned GOLDEN CENTRE of the site: Explore Analytics Context Hub */}
+            <div className="bg-gradient-to-b from-[#e3edf7] via-[#ebf3fa] to-[#e4eef6] border border-sky-200/60 rounded-[3.5rem] p-8 md:p-14 shadow-[0_40px_100px_-15px_rgba(15,82,143,0.18)] relative overflow-hidden my-14 animate-fade-in text-center space-y-12">
+              
+              {/* Dynamic Cyber Circuit Wire Graphic Background Line network behind cards */}
+              <div className="absolute inset-0 z-0 pointer-events-none hidden md:block select-none overflow-hidden">
+                <svg className="w-full h-full opacity-70" viewBox="0 0 1100 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Horizontal routing tracks */}
+                  <path d="M 120,240 L 980,240" stroke="rgba(14,165,233,0.22)" strokeWidth="1.5" strokeDasharray="5 5" />
+                  <path d="M 120,320 L 980,320" stroke="rgba(14,165,233,0.3)" strokeWidth="2" />
+                  <path d="M 120,400 L 980,400" stroke="rgba(14,165,233,0.22)" strokeWidth="1.5" strokeDasharray="5 5" />
+                  
+                  {/* Vertical branch node linkages */}
+                  <path d="M 280,180 L 280,440" stroke="rgba(14,165,233,0.15)" strokeWidth="1.2" />
+                  <path d="M 550,180 L 550,440" stroke="rgba(14,165,233,0.15)" strokeWidth="1.2" />
+                  <path d="M 820,180 L 820,440" stroke="rgba(14,165,233,0.15)" strokeWidth="1.2" />
+                  
+                  {/* Intercept node gems */}
+                  <circle cx="280" cy="240" r="3.5" fill="#0ea5e9" className="animate-pulse" />
+                  <circle cx="550" cy="320" r="4" fill="#10b981" className="animate-pulse" />
+                  <circle cx="820" cy="400" r="3.5" fill="#f59e0b" className="animate-pulse" />
+                  <circle cx="410" cy="320" r="4.5" fill="#3b82f6" stroke="rgba(59,130,246,0.35)" strokeWidth="4" />
+                  <circle cx="680" cy="320" r="4.5" fill="#10b981" stroke="rgba(16,185,129,0.35)" strokeWidth="4" />
+                </svg>
+              </div>
+
+              {/* Decorative Tech Blueprint Grid with increased fidelity */}
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(59,130,246,0.065)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.065)_1px,transparent_1px)] bg-[size:1.25rem_1.25rem] pointer-events-none" />
+
+              {/* Sparkle star at bottom right */}
+              <div className="absolute bottom-6 right-8 text-sky-400/40 select-none pointer-events-none text-2xl animate-pulse">
+                ✦
+              </div>
+
+              <div className="relative z-10 space-y-4 max-w-3xl mx-auto">
+                {/* Decision Intelligence badge */}
+                <div className="inline-flex items-center gap-2 px-5 py-1.5 bg-[#dbe8f4]/60 border border-blue-200/50 text-blue-900 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-[0_2px_12px_rgba(37,99,235,0.05)] backdrop-blur-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)] animate-pulse" />
+                  Decision Intelligence Control Desk
+                </div>
+                
+                {/* Giant custom typography title matching the clean wide letters in the blueprint mock */}
+                <h2 className="text-3xl md:text-[45px] font-extrabold tracking-tight text-[#162e4a] leading-tight select-none">
+                  EXPLORE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#203a56] via-[#3d7096] to-[#203a56] font-black uppercase tracking-wide">ANALYTICS CONTEXT</span>
+                </h2>
+                <p className="text-slate-600 font-semibold text-xs md:text-sm leading-relaxed max-w-xl mx-auto">
+                  Select an analytic engine below to activate real-time intelligence feeds, legal boundary transfers, and Scope 3 accountability mapping.
+                </p>
+              </div>
+
+              {/* Dynamic responsive capsule layout */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10 pt-4 max-w-6xl mx-auto">
+                {[
+                  { 
+                    id: 'all', 
+                    label: 'ALL ANALYTICS', 
+                    icon: LayoutGrid, 
+                    color: 'text-fuchsia-400 group-hover:text-fuchsia-300', 
+                    glow: 'hover:shadow-[0_20px_50px_rgba(217,70,239,0.25)]',
+                    desc: 'End-to-end perspective compiling operational liability transitions, risk pipelines, and environmental metrics.',
+                    tag: '360° MATRIX',
+                    accentColor: 'from-fuchsia-500/10 to-transparent',
+                    headerCol1: '360°',
+                    headerCol2: 'MATRIX',
+                    preview: (
+                      <div className="w-full h-24 bg-[#0a1218]/95 rounded-2xl border border-white/5 p-3.5 flex flex-col justify-between overflow-hidden relative shadow-[inset_0_1px_10px_rgba(0,0,0,0.6)]">
+                        <div className="flex justify-between items-center text-[7.5px] font-mono">
+                          <span className="text-slate-400/90 font-medium tracking-wide">INTEGRATED DATA PIPELINES</span>
+                          <span className="text-fuchsia-400 font-black animate-pulse">ACTIVE</span>
+                        </div>
+                        <div className="relative w-full h-12 flex items-end">
+                          <svg className="w-full h-full" viewBox="0 0 160 50">
+                            <defs>
+                              <linearGradient id="waveFuchsia" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="rgba(217,70,239,0.25)" />
+                                <stop offset="100%" stopColor="rgba(217,70,239,0)" />
+                              </linearGradient>
+                            </defs>
+                            <path d="M 0,25 Q 20,40 40,20 T 80,35 T 120,15 T 160,30" fill="none" stroke="#d946ef" strokeWidth="2" strokeLinecap="round" />
+                            <path d="M 0,25 Q 20,40 40,20 T 80,35 T 120,15 T 160,30 L 160,50 L 0,50 Z" fill="url(#waveFuchsia)" />
+                            {/* Visual peak nodes */}
+                            <circle cx="40" cy="20" r="3.5" fill="rgba(217,70,239,0.4)" className="animate-ping" />
+                            <circle cx="40" cy="20" r="2" fill="#fff" />
+                            <circle cx="120" cy="15" r="3.5" fill="rgba(217,70,239,0.4)" className="animate-ping" />
+                            <circle cx="120" cy="15" r="2" fill="#fff" />
+                          </svg>
+                        </div>
+                      </div>
+                    )
+                  },
+                  { 
+                    id: 'incoterms', 
+                    label: 'INCOTERMS ANALYZER', 
+                    icon: Shield, 
+                    color: 'text-cyan-400 group-hover:text-cyan-300', 
+                    glow: 'hover:shadow-[0_20px_50px_rgba(34,211,238,0.25)]',
+                    desc: 'Institutional risk visualizer tracing transport cost handovers, insurance guidelines, and delivery limits.',
+                    tag: 'ICC RULES 2028',
+                    accentColor: 'from-cyan-500/10 to-transparent',
+                    headerCol1: 'ICC',
+                    headerCol2: 'RULES 2028',
+                    preview: (
+                      <div className="w-full h-24 bg-[#0a1218]/95 rounded-2xl border border-white/5 p-3.5 flex flex-col justify-between overflow-hidden relative shadow-[inset_0_1px_10px_rgba(0,0,0,0.6)]">
+                        <div className="text-[7.5px] font-mono text-slate-400/90 font-medium text-left tracking-wide">
+                          SELLER COSTS AND BUYER RISK
+                        </div>
+                        <div className="space-y-2 py-0.5">
+                          {/* Progress/slider graphic */}
+                          <div className="relative h-1.5 w-full bg-[#101920] rounded-full overflow-hidden flex border border-white/5">
+                            <div className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400" style={{ width: '40%' }} />
+                            <div className="h-full bg-gradient-to-r from-orange-400/35 to-orange-500" style={{ width: '60%' }} />
+                          </div>
+                          
+                          {/* Centered label matched to the physical capsule blueprint photo */}
+                          <div className="flex justify-center">
+                            <span className="px-2.5 py-0.5 rounded bg-cyan-950/40 border border-cyan-500/30 text-[7px] font-mono text-cyan-400 font-bold tracking-widest uppercase">
+                              TRANSFER AT ORIGIN
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  },
+                  { 
+                    id: 'sustainability', 
+                    label: 'SUSTAINABILITY SCOPE 3', 
+                    icon: Leaf, 
+                    color: 'text-emerald-400 group-hover:text-emerald-300', 
+                    glow: 'hover:shadow-[0_20px_50px_rgba(16,185,129,0.25)]',
+                    desc: 'Decarbonization tracking modeling. Displays transport emissions responsibility nodes under international green guidelines.',
+                    tag: 'GHG & ESG PROTOCOLS',
+                    accentColor: 'from-emerald-500/10 to-transparent',
+                    headerCol1: 'GHG & ESG',
+                    headerCol2: 'PROTOCOLS',
+                    preview: (
+                      <div className="w-full h-24 bg-[#0a1218]/95 rounded-2xl border border-white/5 p-3.5 flex flex-col justify-between overflow-hidden relative shadow-[inset_0_1px_10px_rgba(0,0,0,0.6)]">
+                        <div className="flex justify-between items-center text-[7.5px] font-mono">
+                          <span className="text-slate-400/90 font-medium tracking-wide">CARBON FOOTPRINT</span>
+                          <span className="text-emerald-400 font-black animate-pulse">TRACKING</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-0.5 pt-0.5 font-mono text-center">
+                          <div className="flex flex-col">
+                            <span className="text-[6px] text-slate-500">NODE</span>
+                            <span className="text-[8.5px] font-black text-slate-300 leading-tight">FR-04</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[6px] text-slate-500">CO2e (kg)</span>
+                            <span className="text-[8.5px] font-black text-emerald-400 leading-tight">1,240</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[6px] text-slate-500">STATUS</span>
+                            <span className="text-[7.5px] font-bold text-emerald-400 brightness-110 tracking-widest leading-tight">ACTIVE</span>
+                          </div>
+                        </div>
+                        <div className="h-1 w-full bg-[#101920] rounded-full overflow-hidden flex border border-white/5">
+                          <div className="h-full bg-emerald-500" style={{ width: '35%' }} />
+                          <div className="h-full bg-emerald-400/40" style={{ width: '45%' }} />
+                        </div>
+                      </div>
+                    )
+                  },
+                  { 
+                    id: 'compliance', 
+                    label: 'DOCUMENTARY STANDARD', 
+                    icon: Files, 
+                    color: 'text-indigo-400 group-hover:text-indigo-300', 
+                    glow: 'hover:shadow-[0_20px_50px_rgba(99,102,241,0.25)]',
+                    desc: 'Administrative auditing mapping letters of credit, customs declarations, and UCP 800 standards.',
+                    tag: 'UCP 600 FRAMEWORK',
+                    accentColor: 'from-indigo-500/10 to-transparent',
+                    headerCol1: 'UCP 600',
+                    headerCol2: 'FRAMEWORK',
+                    preview: (
+                      <div className="w-full h-24 bg-[#0a1218]/95 rounded-2xl border border-white/5 p-3.5 flex flex-col justify-between overflow-hidden relative shadow-[inset_0_1px_10px_rgba(0,0,0,0.6)]">
+                        <div className="flex justify-between items-center text-[7.5px] font-mono">
+                          <span className="text-slate-400/90 font-medium tracking-wide">AUDIT COMPLIANCE</span>
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-slate-500 text-[6.5px]">STATUS</span>
+                            <span className="px-1.5 py-0.5 rounded bg-indigo-950/40 border border-indigo-500/30 text-[6.5px] font-mono text-indigo-400 font-bold">PASS</span>
+                          </div>
+                        </div>
+                        <div className="space-y-1.5 py-0.5">
+                          <div className="w-full h-2 bg-[#101920] rounded flex items-center justify-between px-1.5 border border-white/5">
+                            <div className="flex items-center gap-1">
+                              <span className="text-[5.5px] text-[#4f7082] font-mono">✔</span>
+                              <span className="text-[6px] text-slate-300 uppercase tracking-widest">UCP BILL STATUS</span>
+                            </div>
+                            <span className="text-[5.5px] text-indigo-400 font-mono font-black">LOCKED</span>
+                          </div>
+                          <div className="w-full h-2 bg-[#101920] rounded flex items-center justify-between px-1.5 border border-white/5">
+                            <div className="flex items-center gap-1">
+                              <span className="text-[5.5px] text-[#4f7082] font-mono">✔</span>
+                              <span className="text-[6px] text-slate-300 uppercase tracking-widest">ICC COMPLIANCY</span>
+                            </div>
+                            <span className="text-[5.5px] text-indigo-400 font-mono font-black">CLEARED</span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveTab(tab.id as TabType);
+                      setViewMode('detail');
+                    }}
+                    className={`flex flex-col items-stretch justify-between text-left gap-5 p-6 rounded-[2.5rem] transition-all duration-500 bg-gradient-to-b from-[#1b2f3d]/95 via-[#101d26]/98 to-[#0a1118]/100 border border-white/20 hover:border-cyan-400/50 hover:bg-[#121f29] shadow-[inset_0_2px_4px_rgba(255,255,255,0.12),0_15px_45px_rgba(0,0,0,0.55)] ${tab.glow} hover:-translate-y-2 group relative overflow-hidden min-h-[425px] cursor-pointer`}
+                  >
+                    {/* Top glass highlight layer for high fidelity 3D physical capsule reflection */}
+                    <div className="absolute top-0 inset-x-0 h-36 bg-gradient-to-b from-white/10 to-transparent rounded-t-[2.5rem] pointer-events-none" />
+
+                    {/* Cyber radial dynamic point light on group hover */}
+                    <div className="absolute -inset-24 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.06),transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+                    {/* Card Top Row Header */}
+                    <div className="flex justify-between items-center relative z-10 w-full">
+                      {/* Premium Circuit-track Microchip Icon container */}
+                      <div className="flex items-center gap-2.5">
+                        <div className="relative p-2.5 rounded-xl bg-[#080f14] border border-cyan-500/35 shadow-[0_0_12px_rgba(34,211,238,0.18)] flex items-center justify-center">
+                          {/* Dotted border tracks representing microcircuit pins */}
+                          <div className="absolute -inset-0.5 border border-dashed border-cyan-500/20 rounded-xl pointer-events-none" />
+                          <tab.icon size={18} className={`${tab.color} transition-colors duration-300`} />
+                        </div>
+                        
+                        <div className="flex flex-col text-left text-slate-400/90 font-mono tracking-wider">
+                          <span className="text-[8px] leading-none">{tab.headerCol1}</span>
+                          <span className="text-[9px] font-black text-slate-300 leading-tight">{tab.headerCol2}</span>
+                        </div>
+                      </div>
+
+                      {/* Small Circuit Branch nodes linking to background */}
+                      <div className="w-4 h-[1px] bg-cyan-500/25 hidden lg:block" />
+                    </div>
+
+                    {/* Premium Integrated Mini-Preview Element */}
+                    <div className="relative z-10 transition-transform duration-500 group-hover:scale-[1.02]">
+                      {tab.preview}
+                    </div>
+
+                    {/* Text Details */}
+                    <div className="space-y-2.5 relative z-10">
+                      <h3 className="text-[13px] font-semibold tracking-wide text-white font-sans uppercase">
+                        {tab.label}
+                      </h3>
+                      <p className="text-[10px] text-slate-300/85 leading-relaxed font-normal">
+                        {tab.desc}
+                      </p>
+                    </div>
+
+                    {/* Left connection line decorator */}
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-10 bg-gradient-to-b from-cyan-500/60 to-transparent rounded-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
         ) : (
