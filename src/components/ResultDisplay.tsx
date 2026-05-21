@@ -372,6 +372,180 @@ const getGhgCsrdDetails = (code: string): GhgCsrdMetric => {
 };
 
 
+interface ResponsibilityData {
+  seller: string[];
+  buyer: string[];
+  insight: string;
+}
+
+export const getResponsibilityBreakdown = (incoterm: string): ResponsibilityData => {
+  const up = incoterm.toUpperCase();
+  switch (up) {
+    case 'EXW':
+      return {
+        seller: [
+          "Warehouse packaging & loading readiness",
+          "Factory gate risk custody & handling"
+        ],
+        buyer: [
+          "Origin local transport (drayage) to terminal",
+          "Export customs clearance & port handling",
+          "Main international air/ocean freight booking",
+          "Import customs clearance, tariffs & duties",
+          "Final delivery logistical emissions"
+        ],
+        insight: "Under EXW, the seller has virtually zero logistics or emission boundary custody. The buyer assumes entire Scope 3 Category 4 reporting and physical routing risk immediately from the factory door."
+      };
+    case 'FCA':
+      return {
+        seller: [
+          "Loading onto buyer's carrier at supplier premises",
+          "Export compliance and customs clearance",
+          "Pre-carriage to carrier terminal (if applicable)"
+        ],
+        buyer: [
+          "Main carriage carrier selection & ocean/air freight booking",
+          "Cargo transit damage & loss risk",
+          "Destination port handling & import clearance",
+          "Final inland trucking drayage to terminal"
+        ],
+        insight: "FCA shifts loaded handover and export compliance to the seller, but the buyer operates the main international transport leg, retaining major carbon and routing selection power."
+      };
+    case 'FAS':
+      return {
+        seller: [
+          "Inland pre-carriage to named port berth",
+          "Placement alongside named ship under hook",
+          "Export customs compliance clearance"
+        ],
+        buyer: [
+          "Port loading crane operation & stevedore handling",
+          "Main ocean transit & bunkering emissions",
+          "Destination handling & import customs clearance",
+          "Onward regional road/rail distribution"
+        ],
+        insight: "Under FAS, the seller is liable for the inland pre-carriage to the port under hook, while the buyer assumes all carbon reporting starting with loading and onward maritime voyage."
+      };
+    case 'FOB':
+      return {
+        seller: [
+          "Inland pre-carriage to origin port terminal",
+          "Port lifting crane, loading, and stowage on-board",
+          "Export customs processing & terminal charges"
+        ],
+        buyer: [
+          "Main ocean freight routing & carbon-efficient carrier booking",
+          "Ocean transit fuel emissions & maritime cargo risk",
+          "Destination port handling, unpacking & import duties",
+          "Final delivery trucking & regional drayage"
+        ],
+        insight: "FOB splits responsibility cleanly at the vessel rail. The seller covers origin handling and loading emissions, while the buyer regulates the substantial main voyage shipping footprint."
+      };
+    case 'CFR':
+      return {
+        seller: [
+          "Inland pre-carriage to destination terminal",
+          "Port loading and export customs clearance tasks",
+          "Main international carriage contracting & freight payments"
+        ],
+        buyer: [
+          "High maritime transit loss risk coverage (retains transfer at origin rail)",
+          "Destination harbor unloading fees and operations",
+          "Import customs clearance & tariff duties",
+          "Final distribution drayage emissions"
+        ],
+        insight: "Under CFR, a high risk of double carbon-counting exists: the seller contracts the main vessel, but because physical risk is with the buyer, both must carefully coordinate Scope 3 report boundaries."
+      };
+    case 'CIF':
+      return {
+        seller: [
+          "Main carriage contracting & ocean freight payments",
+          "Basic cargo insurance procurement for carriage security",
+          "Export customs & loading charges"
+        ],
+        buyer: [
+          "High ocean transit risk (retains risk after ship rail limits)",
+          "Destination port handling & unloading emissions",
+          "Import customs processing & duty filings",
+          "Final leg distribution drayage"
+        ],
+        insight: "Under CIF, the seller retains main freight shipping coordination and buys transit insurance, but risk officially transfers at the origin rail, leaving the buyer holding physical cargo risk."
+      };
+    case 'CPT':
+      return {
+        seller: [
+          "Origin drayage, loading & handling tasks",
+          "Export compliance & customs clearance",
+          "Multimodal main freight transport packaging & payment"
+        ],
+        buyer: [
+          "Transit loss & damage risk coverage from first carrier",
+          "Destination terminal handling & unloading",
+          "Import clearance, local taxes & port duties",
+          "Final delivery trucking emissions"
+        ],
+        insight: "Under CPT, the seller pays for the main carriage up to the named destination place. However, the buyer bears the cargo transit risks from the moment of handover to the very first carrier."
+      };
+    case 'CIP':
+      return {
+        seller: [
+          "Multimodal main freight routing & courier booking",
+          "Comprehensive multi-risk cargo transit insurance",
+          "Export compliance & customs processing"
+        ],
+        buyer: [
+          "Physical loss/damage risk from first carrier handover",
+          "Destination terminal unloading operations",
+          "Import customs border tax filings & customs clearance",
+          "Onward logistics to final warehouse"
+        ],
+        insight: "Under CIP, the seller manages the main transport and funds full-risk transit insurance, while the buyer is burdened with transit risk from the start of first carrier hand-off."
+      };
+    case 'DAP':
+      return {
+        seller: [
+          "Origin loading, export clearance, and ocean carriage",
+          "Continuous logistics operations, tracking & risk control",
+          "Carriage up to named destination place (delivered ready)"
+        ],
+        buyer: [
+          "Terminal unloading charges at destination place",
+          "Import customs clearance processing & duties",
+          "Destination local storage emissions"
+        ],
+        insight: "DAP transfers 90% of transport and logistical risk to the seller, who controls emissions continuously up to destination. The buyer reports minimal scope 3 transport metrics."
+      };
+    case 'DPU':
+      return {
+        seller: [
+          "International transit (multimodal) freight bookings",
+          "Risk custody and tracking up to physical unloading at terminal",
+          "Destination unloading crane/machinery operations"
+        ],
+        buyer: [
+          "Import custom declarations & tariff duties",
+          "Final inland storage facility handling & regional hauling"
+        ],
+        insight: "Under DPU, the seller controls transit and physical unloading carbon, ensuring the buyer receives cargo unloaded with zero terminal logistics concerns."
+      };
+    case 'DDP':
+    default:
+      return {
+        seller: [
+          "Complete end-to-end transport emissions responsibility",
+          "Dual customs clearances (export & import regulatory compliance)",
+          "Import duties, VAT, and local port clearance costs"
+        ],
+        buyer: [
+          "Perfect sustainability passivity (zero transit custody or carbon risk)",
+          "Final storage facility handling only"
+        ],
+        insight: "DDP signifies maximum seller accountability. The buyer enjoys complete ESG passivity for transit logistics, transferring 100% of carbon, risk, and customs compliance to the seller."
+      };
+  }
+};
+
+
 type TabType = 'incoterms' | 'sustainability' | 'compliance' | 'all';
 type ViewMode = 'hub' | 'detail';
 
@@ -1194,145 +1368,248 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                     </section>
                   </div>
 
-                  <div className={`${(activeTab === 'all' || activeTab === 'sustainability') ? 'block' : 'hidden print:block'} ${isPrintingReport ? 'print:hidden' : ''}`}>
-                    {/* Sustainability Section */}
-                    <section className="bg-emerald-50/70 border border-emerald-100 rounded-[2.5rem] p-10 shadow-sm space-y-12 relative overflow-hidden text-emerald-950">
-                       <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
-                       
-                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-emerald-100 pb-6 relative z-10">
-                        <div>
-                          <h3 className="flex items-center gap-3 text-emerald-950 font-black text-2xl">
-                            <Leaf className="text-emerald-600" size={28} />
-                            Sustainability & Carbon Control
-                          </h3>
-                          <p className="text-[11px] text-emerald-800 font-medium italic mt-1">
-                            Operational & Financial carbon boundary mapping under international ESG disclosures.
-                          </p>
-                        </div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 px-3.5 py-1.5 bg-white border border-emerald-100 rounded-xl shadow-sm">
-                          GHG Protocol & CSRD (ESRS E1) Directive
-                        </span>
-                      </div>
-
-                      {/* Carbon Control Allocation Grid */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-                        {/* Seller Carbon Control */}
-                        <div className="bg-white border border-emerald-100 p-6 rounded-3xl space-y-4 shadow-sm">
-                          <div className="flex justify-between items-end">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2.5 h-2.5 bg-blue-500 rounded-full" />
-                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">Seller Carbon Control</span>
-                            </div>
-                            <span className="text-2xl font-black text-emerald-950">{info.sellerCarbonControl}%</span>
+                  <div className={`${(activeTab === 'all' || activeTab === 'sustainability') ? 'block' : 'hidden print:block'} ${isPrintingReport ? 'print:hidden' : ''} space-y-10`}>
+                    {/* Sustainability Section 1: Carbon & Risk Responsibility Allocation */}
+                    <section className="bg-emerald-50/40 border border-emerald-100/80 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-8 relative overflow-hidden text-slate-900 animate-fade-in">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/[0.02] rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+                        
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-emerald-100 pb-6 relative z-10">
+                          <div>
+                            <h3 className="flex items-center gap-3 text-emerald-950 font-extrabold text-2xl">
+                              <Leaf className="text-emerald-600 animate-pulse" size={28} />
+                              Carbon & Risk Responsibility Allocation
+                            </h3>
+                            <p className="text-[11px] text-slate-600 font-semibold italic mt-1">
+                              Operational & Financial carbon boundary mapping under international ESG and CSRD disclosures.
+                            </p>
                           </div>
-                          <div className="h-4 w-full bg-emerald-50 rounded-full overflow-hidden border border-emerald-100 p-0.5">
-                            <motion.div 
-                              initial={{ width: 0 }}
-                              animate={{ width: `${info.sellerCarbonControl}%` }}
-                              transition={{ delay: 0.8, duration: 1.5 }}
-                              className="h-full bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.3)]"
-                            />
-                          </div>
-                          <p className="text-[10px] text-slate-600 leading-relaxed font-semibold">
-                            {getGhgCsrdDetails(code).sellerRoleDetails}
-                          </p>
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-850 px-3.5 py-1.5 bg-emerald-100/45 border border-emerald-200/55 rounded-xl shadow-sm">
+                            GHG Protocol & CSRD (ESRS E1) Directive
+                          </span>
                         </div>
 
-                        {/* Buyer Carbon Control */}
-                        <div className="bg-white border border-emerald-100 p-6 rounded-3xl space-y-4 shadow-sm">
-                          <div className="flex justify-between items-end">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2.5 h-2.5 bg-orange-500 rounded-full" />
-                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">Buyer Carbon Control</span>
-                            </div>
-                            <span className="text-2xl font-black text-emerald-950">{info.buyerCarbonControl}%</span>
+                      {/* GHG Protocol Scope 3 Category Breakdown (Visual Bar First) */}
+                      <div className="space-y-6 relative z-10 bg-white/70 border border-emerald-100/50 rounded-3xl p-6 md:p-8">
+                        <div className="flex justify-between items-center border-b border-emerald-100 pb-4 mb-2">
+                          <div className="space-y-0.5">
+                            <h4 className="text-emerald-900 font-black text-xs uppercase tracking-wider">GHG Protocol Scope 3 Category Breakdown</h4>
+                            <p className="text-[10px] text-slate-500 font-semibold">Real-time custody tracking showing where carbon accountability and risk transfer occur.</p>
                           </div>
-                          <div className="h-4 w-full bg-emerald-50 rounded-full overflow-hidden border border-emerald-100 p-0.5">
-                            <motion.div 
-                              initial={{ width: 0 }}
-                              animate={{ width: `${info.buyerCarbonControl}%` }}
-                              transition={{ delay: 1, duration: 1.5 }}
-                              className="h-full bg-orange-500 rounded-full shadow-[0_0_15px_rgba(249,115,22,0.3)]"
-                            />
-                          </div>
-                          <p className="text-[10px] text-slate-600 leading-relaxed font-semibold">
-                            {getGhgCsrdDetails(code).buyerRoleDetails}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Segmentation */}
-                      <div className="pt-4 space-y-6 relative z-10">
-                        <div className="flex justify-between items-center">
-                          <h4 className="text-emerald-900 font-bold text-sm">GHG Protocol Scope 3 Category Breakdown</h4>
                           <span className="text-emerald-600"><Info size={16} /></span>
                         </div>
-                        
-                        <div className="relative pt-12 pb-2">
-                          {/* Precise Carbon Handover Pin Pinpointed exactly at info.sellerCarbonControl% */}
-                          <motion.div 
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1, left: `${info.sellerCarbonControl}%` }}
-                            transition={{ delay: 1, type: "spring" }}
-                            className="absolute top-1/2 -translate-y-1/2 -ml-4 w-8 h-8 bg-white border-4 border-emerald-600 rounded-full shadow-2xl z-20 flex items-center justify-center cursor-pointer"
-                            whileHover={{ scale: 1.15 }}
-                          >
-                            <div className="w-2.5 h-2.5 bg-emerald-600 rounded-full animate-pulse" />
-                            <div className="absolute bottom-1/2 left-1/2 -translate-x-1/2 w-0.5 h-14 bg-emerald-600/70 -z-10" />
-                            
-                            {/* Floating elegant tooltip pointing down to the handover point */}
-                            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2.5 rounded-2xl text-[10px] font-black tracking-widest uppercase whitespace-nowrap shadow-2xl border border-white/10 text-center z-35">
-                              <div className="text-emerald-400 text-[8px] font-black uppercase tracking-[0.2em] mb-0.5">Carbon Control Transfer</div>
-                              {info.transferPoint}
-                              <div className="text-[12px] leading-tight normal-case font-black mt-0.5 text-emerald-300 font-sans tracking-wide">
-                                Handover Point
-                              </div>
-                              <div className="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-slate-900" />
-                            </div>
-                          </motion.div>
 
-                          {/* The break down allocation segments */}
-                          <div className="h-8 w-full bg-slate-100 rounded-xl overflow-hidden flex border border-emerald-100 shadow-inner relative z-10">
-                            {info.scope3Allocation.map((segment, i) => (
-                              <motion.div
-                                key={i}
-                                initial={{ width: 0 }}
-                                animate={{ width: `${segment.percentage}%` }}
-                                transition={{ delay: 1.2 + (i * 0.2) }}
-                                className={`${segment.color} h-full relative group cursor-help`}
-                                title={`${segment.label}: ${segment.percentage}%`}
+                        <div className="relative pt-6 pb-4 px-1">
+                          {/* Seller & Buyer Indicators with Percentages directly above the track for clear view */}
+                          <div className="flex justify-between items-center mb-4">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 flex items-center gap-1.5 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-xl shadow-sm">
+                              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                              Seller Logistics: {info.sellerCarbonControl}%
+                            </span>
+                            <span className="text-[10px] font-black uppercase tracking-wider text-orange-800 flex items-center gap-1.5 bg-orange-50 border border-orange-100 px-3 py-1.5 rounded-xl shadow-sm">
+                              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                              Buyer Logistics: {info.buyerCarbonControl}%
+                            </span>
+                          </div>
+
+                          <div className="relative h-12 mt-6 mb-8 flex items-center">
+                            {/* The break down allocation segments (Progress Bar) */}
+                            <div className="h-10 w-full bg-slate-100 rounded-2xl overflow-hidden flex border border-slate-200/70 shadow-inner relative z-10">
+                              {info.scope3Allocation.map((segment, i) => (
+                                <motion.div
+                                  key={i}
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${segment.percentage}%` }}
+                                  transition={{ delay: 1.2 + (i * 0.2) }}
+                                  className={`${segment.color} h-full relative group cursor-help`}
+                                  title={`${segment.label}: ${segment.percentage}%`}
+                                >
+                                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                                </motion.div>
+                              ))}
+                            </div>
+
+                            {/* Percentage-labels overlayed ON the bar dynamically at the centers of seller and buyer boundaries */}
+                            {info.sellerCarbonControl > 10 && (
+                              <div 
+                                style={{ left: `${info.sellerCarbonControl / 2}%` }}
+                                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 text-[10px] font-black uppercase tracking-widest text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)] z-20 pointer-events-none whitespace-nowrap text-center"
                               >
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                              </motion.div>
-                            ))}
+                                Seller {info.sellerCarbonControl}%
+                              </div>
+                            )}
+                            {info.buyerCarbonControl > 10 && (
+                              <div 
+                                style={{ left: `${info.sellerCarbonControl + (info.buyerCarbonControl / 2)}%` }}
+                                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 text-[10px] font-black uppercase tracking-widest text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)] z-20 pointer-events-none whitespace-nowrap text-center"
+                              >
+                                Buyer {info.buyerCarbonControl}%
+                              </div>
+                            )}
+
+                            {/* Precise Carbon Handover Pin Pinprinted exactly at info.sellerCarbonControl% directly ON the progress bar */}
+                            <motion.div 
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1, left: `${info.sellerCarbonControl}%` }}
+                              transition={{ delay: 1, type: "spring" }}
+                              className="absolute top-1/2 -translate-y-1/2 -ml-4 w-8 h-8 bg-white border-4 border-slate-900 rounded-full shadow-2xl z-30 flex items-center justify-center cursor-pointer"
+                              whileHover={{ scale: 1.15 }}
+                            >
+                              <div className="w-2.5 h-2.5 bg-slate-900 rounded-full animate-pulse" />
+                              <div className="absolute bottom-1/2 left-1/2 -translate-x-1/2 w-0.5 h-12 bg-slate-900/40 -z-10" />
+                              
+                              {/* Floating elegant tooltip pointing down to the handover point */}
+                              <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-3 rounded-2xl text-[10px] font-black tracking-widest uppercase whitespace-nowrap shadow-2xl border border-white/10 text-center z-40">
+                                <div className="text-emerald-400 text-[8px] font-black uppercase tracking-[0.2em] mb-0.5">Risk & Sustainability Handover</div>
+                                {info.transferPoint}
+                                <div className="text-[12px] leading-tight normal-case font-black mt-0.5 text-emerald-300 font-sans tracking-wide">
+                                  Handover Point
+                                </div>
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-slate-900" />
+                              </div>
+                            </motion.div>
                           </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-6">
+                        <div className="flex flex-wrap gap-4 pt-2">
                           {info.scope3Allocation.map((segment, i) => (
-                            <div key={i} className="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-xl border border-emerald-100 shadow-sm">
-                                <div className={`w-3 h-3 rounded-full ${segment.color}`} />
-                                <span className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{segment.label} ({segment.percentage}%)</span>
+                            <div key={i} className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-inner">
+                                <span className={`w-2.5 h-2.5 rounded-full ${segment.color}`} />
+                                <span className="text-[9px] font-extrabold text-slate-700 uppercase tracking-widest">{segment.label} ({segment.percentage}%)</span>
                             </div>
                           ))}
                         </div>
                       </div>
 
-                      {/* CSRD Regulations and GHG Alignment Deep-Dive */}
-                      <div className="pt-8 border-t border-emerald-100 space-y-8 relative z-10">
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                          <div>
-                            <h4 className="text-sm font-black uppercase tracking-widest text-emerald-900">
-                              CSRD Compliance & Audit Roadmap
-                            </h4>
-                            <p className="text-[11px] text-emerald-800 font-semibold italic">
-                              A simplified 3-step operational map for greenhouse gas accounting.
-                            </p>
-                          </div>
-                          <div className={`px-4 py-2 border rounded-xl text-[9px] font-black uppercase tracking-widest ${getGhgCsrdDetails(code).ratingColor}`}>
-                            {getGhgCsrdDetails(code).rating}
-                          </div>
+                      {/* Carbon & Risk Responsibility Allocation Cards */}
+                      {(() => {
+                        const breakdown = getResponsibilityBreakdown(code);
+                        return (
+                          <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                              {/* Seller Responsibility Card */}
+                              <div className="bg-white/90 border border-emerald-100 p-8 rounded-3xl space-y-6 shadow-sm flex flex-col justify-between hover:bg-white transition-all">
+                                <div className="space-y-4">
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-[11px] font-black uppercase tracking-widest text-emerald-800 bg-emerald-50 border border-emerald-100/50 px-2.5 py-1 rounded-lg">
+                                      Seller Scope
+                                    </span>
+                                    <span className="text-3xl font-black text-emerald-950 animate-pulse">
+                                      {info.sellerCarbonControl}%
+                                    </span>
+                                  </div>
+                                  
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                      <span>Transport Responsibility Split</span>
+                                      <span>{info.sellerCarbonControl}% Alloc</span>
+                                    </div>
+                                    <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200/70 p-0.5">
+                                      <motion.div 
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${info.sellerCarbonControl}%` }}
+                                        transition={{ delay: 0.8, duration: 1.5 }}
+                                        className="h-full bg-blue-600 rounded-full shadow-[0_0_12px_rgba(37,99,235,0.25)]"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div className="pt-4 border-t border-slate-100 space-y-3">
+                                    <h4 className="text-xs font-black text-emerald-900 uppercase tracking-widest">
+                                      Seller Includes:
+                                    </h4>
+                                    <ul className="space-y-2.5">
+                                      {breakdown.seller.map((item, id) => (
+                                        <li key={id} className="flex items-start gap-2.5 text-xs text-slate-700 font-semibold">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
+                                          <span>{item}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Buyer Responsibility Card */}
+                              <div className="bg-white/90 border border-orange-100 p-8 rounded-3xl space-y-6 shadow-sm flex flex-col justify-between hover:bg-white transition-all">
+                                <div className="space-y-4">
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-[11px] font-black uppercase tracking-widest text-orange-850 bg-orange-50 border border-orange-100/50 px-2.5 py-1 rounded-lg">
+                                      Buyer Scope
+                                    </span>
+                                    <span className="text-3xl font-black text-emerald-950 animate-pulse">
+                                      {info.buyerCarbonControl}%
+                                    </span>
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                      <span>Transport Responsibility Split</span>
+                                      <span>{info.buyerCarbonControl}% Alloc</span>
+                                    </div>
+                                    <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200/70 p-0.5">
+                                      <motion.div 
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${info.buyerCarbonControl}%` }}
+                                        transition={{ delay: 1, duration: 1.5 }}
+                                        className="h-full bg-orange-500 rounded-full shadow-[0_0_12px_rgba(249,115,22,0.25)]"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div className="pt-4 border-t border-slate-100 space-y-3">
+                                    <h4 className="text-xs font-black text-orange-950 uppercase tracking-widest">
+                                      Buyer Includes:
+                                    </h4>
+                                    <ul className="space-y-2.5">
+                                      {breakdown.buyer.map((item, id) => (
+                                        <li key={id} className="flex items-start gap-2.5 text-xs text-slate-700 font-semibold">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 flex-shrink-0" />
+                                          <span>{item}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Key Insight Card */}
+                            <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-3xl relative z-10 space-y-3 transition-colors hover:bg-emerald-100/50 shadow-sm">
+                              <div className="flex items-center gap-2 text-emerald-900 font-extrabold text-xs uppercase tracking-widest">
+                                <Info size={16} className="text-emerald-600" />
+                                Sustainability & Risk Key Insight
+                              </div>
+                              <p className="text-xs text-slate-800 font-bold leading-relaxed">
+                                {breakdown.insight}
+                              </p>
+                              <p className="text-[10px] text-emerald-700/60 font-medium italic leading-relaxed pt-2.5 border-t border-emerald-100">
+                                Carbon emissions depend on carrier choice and transport mode, not Incoterm alone. This analysis shows data visibility and accountability structure only.
+                              </p>
+                            </div>
+                          </>
+                        );
+                      })()}
+
+                    </section>
+
+                    {/* Section 2: CSRD Compliance & Audit Roadmap */}
+                    <section className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-8 relative overflow-hidden text-slate-900 animate-fade-in">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/[0.01] rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+                      
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-6 relative z-10">
+                        <div>
+                          <h3 className="flex items-center gap-3 text-slate-900 font-extrabold text-2xl font-sans tracking-tight">
+                            <Shield className="text-blue-600 shadow-sm rounded-lg animate-pulse" size={28} />
+                            CSRD Compliance & Audit Roadmap
+                          </h3>
+                          <p className="text-[11px] text-slate-500 font-semibold italic mt-1">
+                            A simplified 3-step operational map for greenhouse gas accounting.
+                          </p>
                         </div>
+                        <div className={`px-4 py-2 border rounded-xl text-[9px] font-black uppercase tracking-widest shadow-sm ${getGhgCsrdDetails(code).ratingColor}`}>
+                          {getGhgCsrdDetails(code).rating}
+                        </div>
+                      </div>
 
                         {/* 3-Step Infographic Flow */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
@@ -1452,9 +1729,26 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                             </div>
                           </div>
                         </div>
+                      </section>
 
-                        {/* Sustainability Insights lists */}
-                        <div className="space-y-4 pt-6 border-t border-emerald-100 bg-emerald-100/20 rounded-3xl p-6">
+                    {/* Section 3: Practical Carbon Reduction & Greener Path Recommendations */}
+                    <section className="bg-emerald-50/40 border border-emerald-100/80 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-8 relative overflow-hidden text-slate-900 animate-fade-in">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+                      
+                      {/* Section Header */}
+                      <div className="border-b border-emerald-100 pb-6 relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                          <h3 className="text-emerald-950 font-black text-2xl flex items-center gap-2">
+                            <span>🌿</span> Sustainability & Greener Recommendations
+                          </h3>
+                          <p className="text-[11px] text-emerald-800 font-semibold italic mt-0.5">
+                            Actionable carbon reduction insights and comparison matrices to transition to greener frameworks.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Sustainability Insights lists */}
+                      <div className="space-y-4 pt-6 bg-white/70 border border-emerald-100/50 rounded-3xl p-6 relative z-10">
                           <h4 className="text-xs font-black uppercase tracking-widest text-emerald-900">
                             Practical Carbon Reduction Recommendations
                           </h4>
@@ -1778,7 +2072,6 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                            </p>
                         </div>
 
-                      </div>
                     </section>
                   </div>
 
