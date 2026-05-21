@@ -13,3 +13,21 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  /* Guarantee page breaks start beautifully for designated parts */
+  .print\:break-before-page {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+  
+  /* Prevent cards or sections from splitting awkwardly across sheets */
+  section, div.bg-white, table, tr {
+    break-inside: avoid !important;
+  }
+}

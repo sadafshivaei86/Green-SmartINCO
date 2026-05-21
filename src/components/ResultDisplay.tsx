@@ -598,21 +598,22 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
               <h1 className="text-7xl font-black tracking-tighter" id="incoterm-code">{info.code}</h1>
               <p className="text-2xl text-slate-300 mt-2 font-semibold">{info.name}</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 print:hidden">
-              <button
-                onClick={handleExportPDF}
-                className="flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl transition-all shadow-lg hover:shadow-blue-500/50 text-sm font-black uppercase tracking-widest group"
-              >
-                <Download size={18} className="group-hover:-translate-y-0.5 transition-transform" />
-                Export PDF Report
-              </button>
+            <div className="flex flex-col gap-3 print:hidden w-full md:w-auto">
               <button
                 onClick={onReset}
-                className="flex items-center gap-3 px-8 py-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all text-sm font-bold backdrop-blur-md border border-white/10"
+                className="flex items-center justify-center gap-3 px-8 py-3.5 bg-white/10 hover:bg-white/20 rounded-2xl transition-all text-sm font-bold backdrop-blur-md border border-white/10 w-full md:w-64"
                 id="start-over-btn"
               >
                 <RefreshCcw size={18} />
                 New Analysis
+              </button>
+              <button
+                onClick={handleExportPDF}
+                className="flex items-center justify-center gap-3 px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl transition-all text-sm font-bold shadow-lg shadow-blue-600/30 w-full md:w-64"
+                id="export-pdf-btn"
+              >
+                <Download size={18} className="group-hover:-translate-y-0.5 transition-transform" />
+                Export PDF
               </button>
             </div>
           </div>
@@ -806,6 +807,19 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
               {/* Decorative Tech Blueprint Grid with increased fidelity */}
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(59,130,246,0.065)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.065)_1px,transparent_1px)] bg-[size:1.25rem_1.25rem] pointer-events-none" />
 
+              {/* Sweeping holographic cyber-scanning line to visually grab attention in real time */}
+              <motion.div 
+                className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent pointer-events-none z-10 shadow-[0_0_15px_rgba(34,211,238,0.9)] opacity-60"
+                animate={{
+                  top: ['0%', '100%', '0%']
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+
               {/* Sparkle star at bottom right */}
               <div className="absolute bottom-6 right-8 text-sky-400/40 select-none pointer-events-none text-2xl animate-pulse">
                 ✦
@@ -818,21 +832,21 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                   Decision Intelligence Control Desk
                 </div>
                 
-                {/* Giant custom typography title matching the clean wide letters in the blueprint mock */}
-                <h2 className="text-3xl md:text-[45px] font-extrabold tracking-tight text-[#162e4a] leading-tight select-none">
-                  EXPLORE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#203a56] via-[#3d7096] to-[#203a56] font-black uppercase tracking-wide">ANALYTICS CONTEXT</span>
+                {/* Giant custom typography title in a single line with emphasized 'ANALYTICS' */}
+                <h2 className="text-2xl sm:text-3xl md:text-[44px] font-extrabold tracking-wider text-[#162e4a] leading-tight select-none uppercase whitespace-normal md:whitespace-nowrap">
+                  EXPLORE <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-sky-400 to-blue-500 font-black tracking-widest drop-shadow-[0_2px_15px_rgba(34,211,238,0.45)] animate-pulse px-2.5">ANALYTICS</span> CONTEXT
                 </h2>
-                <p className="text-slate-600 font-semibold text-xs md:text-sm leading-relaxed max-w-xl mx-auto">
-                  Select an analytic engine below to activate real-time intelligence feeds, legal boundary transfers, and Scope 3 accountability mapping.
+                <p className="text-slate-600 font-semibold text-xs md:text-sm leading-relaxed max-w-2xl mx-auto">
+                  Select an engine to explore Incoterms obligations, map Scope 3 emissions and CSRD requirements, and verify documentary compliance under UCP 600 and ISBP standards — in real time.
                 </p>
               </div>
 
-              {/* Dynamic responsive capsule layout */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10 pt-4 max-w-6xl mx-auto">
+              {/* Dynamic responsive capsule layout - aligned in a single row from md screen up */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-10 pt-4 max-w-6xl mx-auto">
                 {[
                   { 
                     id: 'all', 
-                    label: 'ALL ANALYTICS', 
+                    label: 'All Analytics', 
                     icon: LayoutGrid, 
                     color: 'text-fuchsia-400 group-hover:text-fuchsia-300', 
                     glow: 'hover:shadow-[0_20px_50px_rgba(217,70,239,0.25)]',
@@ -869,15 +883,15 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                   },
                   { 
                     id: 'incoterms', 
-                    label: 'INCOTERMS ANALYZER', 
+                    label: 'Incoterms Analytics', 
                     icon: Shield, 
                     color: 'text-cyan-400 group-hover:text-cyan-300', 
                     glow: 'hover:shadow-[0_20px_50px_rgba(34,211,238,0.25)]',
                     desc: 'Institutional risk visualizer tracing transport cost handovers, insurance guidelines, and delivery limits.',
-                    tag: 'ICC RULES 2028',
+                    tag: 'INCOTERMS 2020 ICC',
                     accentColor: 'from-cyan-500/10 to-transparent',
-                    headerCol1: 'ICC',
-                    headerCol2: 'RULES 2028',
+                    headerCol1: 'INCOTERMS',
+                    headerCol2: '2020 ICC',
                     preview: (
                       <div className="w-full h-24 bg-[#0a1218]/95 rounded-2xl border border-white/5 p-3.5 flex flex-col justify-between overflow-hidden relative shadow-[inset_0_1px_10px_rgba(0,0,0,0.6)]">
                         <div className="text-[7.5px] font-mono text-slate-400/90 font-medium text-left tracking-wide">
@@ -902,14 +916,14 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                   },
                   { 
                     id: 'sustainability', 
-                    label: 'SUSTAINABILITY SCOPE 3', 
+                    label: 'Sustainability Analytics', 
                     icon: Leaf, 
                     color: 'text-emerald-400 group-hover:text-emerald-300', 
                     glow: 'hover:shadow-[0_20px_50px_rgba(16,185,129,0.25)]',
                     desc: 'Decarbonization tracking modeling. Displays transport emissions responsibility nodes under international green guidelines.',
-                    tag: 'GHG & ESG PROTOCOLS',
+                    tag: 'GHG & CSRD PROTOCOLS',
                     accentColor: 'from-emerald-500/10 to-transparent',
-                    headerCol1: 'GHG & ESG',
+                    headerCol1: 'GHG & CSRD',
                     headerCol2: 'PROTOCOLS',
                     preview: (
                       <div className="w-full h-24 bg-[#0a1218]/95 rounded-2xl border border-white/5 p-3.5 flex flex-col justify-between overflow-hidden relative shadow-[inset_0_1px_10px_rgba(0,0,0,0.6)]">
@@ -940,11 +954,11 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                   },
                   { 
                     id: 'compliance', 
-                    label: 'DOCUMENTARY STANDARD', 
+                    label: 'Documentary Analytics', 
                     icon: Files, 
                     color: 'text-indigo-400 group-hover:text-indigo-300', 
                     glow: 'hover:shadow-[0_20px_50px_rgba(99,102,241,0.25)]',
-                    desc: 'Administrative auditing mapping letters of credit, customs declarations, and UCP 800 standards.',
+                    desc: 'Administrative auditing mapping letters of credit, customs declarations, and UCP 600 standards.',
                     tag: 'UCP 600 FRAMEWORK',
                     accentColor: 'from-indigo-500/10 to-transparent',
                     headerCol1: 'UCP 600',
@@ -1019,7 +1033,7 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
 
                     {/* Text Details */}
                     <div className="space-y-2.5 relative z-10">
-                      <h3 className="text-[13px] font-semibold tracking-wide text-white font-sans uppercase">
+                      <h3 className="text-[13px] font-semibold tracking-wide text-white font-sans">
                         {tab.label}
                       </h3>
                       <p className="text-[10px] text-slate-300/85 leading-relaxed font-normal">
@@ -1080,9 +1094,10 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                 <div className="space-y-12">
                   <div className={(activeTab === 'all' || activeTab === 'incoterms' || isPrintingReport) ? 'block' : 'hidden print:block'}>
                     {/* Report Header for PDF */}
-                    <div className="hidden print:block mb-10 pb-6 border-b-4 border-slate-900">
+                    <div className="hidden print:block mb-10 pb-6 border-b-4 border-blue-900">
                       <div className="flex justify-between items-center">
                         <div>
+                          <div className="text-[10px] font-black text-blue-600 uppercase tracking-[0.25em] mb-1">PART 01: Transfer of Risk, Cost & Carrier Handovers</div>
                           <h2 className="text-3xl font-black uppercase tracking-tighter text-slate-900">Incoterms® 2020 Technical Report</h2>
                           <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1 text-slate-400">Institutional Logistics Analysis Portfolio</p>
                         </div>
@@ -1594,6 +1609,21 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                   </div>
 
                   <div className={`${(activeTab === 'all' || activeTab === 'sustainability') ? 'block' : 'hidden print:block'} ${isPrintingReport ? 'print:hidden' : ''} space-y-10`}>
+                    {/* Sustainability Report Header for PDF */}
+                    <div className="hidden print:block mb-10 pb-6 border-b-4 border-emerald-800 print:break-before-page">
+                      <div className="flex justify-between items-center font-heading">
+                        <div>
+                          <div className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.25em] mb-1 font-sans">PART 02: Carbon & Risk Responsibility Allocation</div>
+                          <h2 className="text-3xl font-black uppercase tracking-tighter text-emerald-950">Sustainability & Scope 3 Analysis</h2>
+                          <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1 text-emerald-700 font-sans">GHG Protocol & CSRD Compliance Portfolio</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-4xl font-black text-emerald-900">{info.code}</div>
+                          <div className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mt-1 font-sans">Sustainability Node</div>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Sustainability Section 1: Carbon & Risk Responsibility Allocation */}
                     <section className="bg-emerald-50/40 border border-emerald-100/80 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-8 relative overflow-hidden text-slate-900 animate-fade-in">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/[0.02] rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
@@ -2301,6 +2331,21 @@ export default function ResultDisplay({ code, onReset }: ResultDisplayProps) {
                   </div>
 
                   <div className={`${(activeTab === 'all' || activeTab === 'compliance') ? 'block' : 'hidden print:block'} ${isPrintingReport ? 'print:hidden' : ''}`}>
+                    {/* Documentary Compliance Report Header for PDF */}
+                    <div className="hidden print:block mb-10 pb-6 border-b-4 border-indigo-700 print:break-before-page">
+                      <div className="flex justify-between items-center font-heading">
+                        <div>
+                          <div className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.25em] mb-1 font-sans">PART 03: Administrative Auditing & Documentary Standards</div>
+                          <h2 className="text-3xl font-black uppercase tracking-tighter text-indigo-950">Documentary Compliance Audit</h2>
+                          <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1 text-indigo-600 font-sans">UCP 600 Framework & ISBP standard requirements</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-4xl font-black text-indigo-900">{info.code}</div>
+                          <div className="text-[10px] font-black text-indigo-600 uppercase tracking-widest mt-1 font-sans">Audit Protocol</div>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Institutional Standards Section */}
                     <section className="bg-white border border-slate-100 rounded-[2.5rem] p-1 shadow-sm overflow-hidden">
                       <div className="bg-slate-50 p-8 border-b border-slate-100">
