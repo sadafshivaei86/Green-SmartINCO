@@ -225,7 +225,7 @@ export default function App() {
           
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/5">
             <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest">
-              © 2026 Green SmartINCO. All Rights Reserved.
+              © 2026 Green SmartINCO. All rights reserved. Developed by Sadaf Shivaei
             </p>
             <div className="flex gap-10 text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">
               <a href="#" className="hover:text-white transition-colors">Terms</a>
