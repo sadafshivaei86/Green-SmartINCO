@@ -5,9 +5,10 @@ import { ArrowRight, Globe, ShieldCheck, Leaf, FileText, Ship, Truck, Package, C
 interface HomeProps {
   onStartWizard: () => void;
   onStartCompare: () => void;
+  onStartContract: () => void;
 }
 
-export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
+export default function Home({ onStartWizard, onStartCompare, onStartContract }: HomeProps) {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -33,26 +34,33 @@ export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
               <ShieldCheck size={14} />
               Incoterms® 2020 Compliant
             </div>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
-              Navigate Trade <br />
-              <span className="text-emerald-500">Without Risk.</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[0.95]">
+              Smart Trade &<br />
+              <span className="text-emerald-500">Banking Docs.</span>
             </h1>
-            <p className="text-slate-300 text-xl max-w-lg leading-relaxed font-medium">
-              The world's smartest AI-driven Incoterms advisor. Quantify liability, track carbon footprints, and master global logistics in minutes.
+            <p className="text-slate-300 text-lg max-w-lg leading-relaxed font-semibold">
+              An intelligent platform for managing banking documentation & LC compliance (UCP 600), selecting optimal Incoterms® 2020, and analyzing global logistics under sustainability and ESG metrics.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
               <button 
                 onClick={onStartWizard}
-                className="group px-8 py-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 shadow-xl shadow-emerald-600/20 hover:scale-105 active:scale-95"
+                className="group px-8 py-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 shadow-xl shadow-emerald-600/20 hover:scale-105 active:scale-95 cursor-pointer"
               >
-                Start Free Analysis
+                Start Analysis
                 <ArrowRight className="group-hover:translate-x-1 transition-transform" size={24} />
               </button>
               <button 
                 onClick={onStartCompare}
-                className="px-8 py-5 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-black text-lg transition-all backdrop-blur-md border border-white/10"
+                className="px-8 py-5 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-black text-lg transition-all backdrop-blur-md border border-white/10 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 Compare Terms
+              </button>
+              <button 
+                onClick={onStartContract}
+                className="px-8 py-5 bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-300 rounded-2xl font-black text-lg transition-all border border-emerald-500/30 hover:border-emerald-500/60 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <FileText size={18} />
+                Contract Auditor
               </button>
             </div>
           </motion.div>
@@ -64,50 +72,37 @@ export default function Home({ onStartWizard, onStartCompare }: HomeProps) {
             className="hidden md:block relative"
           >
              <div className="space-y-6">
-               <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform duration-700">
                     <Globe size={150} />
                   </div>
                   <div className="space-y-6">
-                    <div className="flex items-center gap-4 border-b border-white/10 pb-6">
-                      <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">01</div>
+                    <div className="flex items-start gap-4 border-b border-white/10 pb-6 text-left">
+                      <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0">📜</div>
                       <div>
-                        <div className="text-white font-bold">Select Your Role</div>
-                        <div className="text-slate-400 text-sm">Buyer or Seller perspective</div>
+                        <div className="text-white font-bold text-base">Banking Docs & UCP 600</div>
+                        <div className="text-slate-400 text-xs mt-1">Review Letter of Credit (L/C) terms and align commercial shipping documents with international banking rules.</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 border-b border-white/10 pb-6">
-                      <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">02</div>
+                    <div className="flex items-start gap-4 border-b border-white/10 pb-6 text-left">
+                      <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0">🚢</div>
                       <div>
-                        <div className="text-white font-bold">Quantify Impact</div>
-                        <div className="text-slate-400 text-sm">Risk Scores & CO2 Data</div>
+                        <div className="text-white font-bold text-base">Correct Incoterms Selection</div>
+                        <div className="text-slate-400 text-xs mt-1">Prevent international trade losses with clean segmentation of costs and liabilities under ICC 2020 rules.</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">03</div>
+                    <div className="flex items-start gap-4 text-left">
+                      <div className="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0">🌱</div>
                       <div>
-                        <div className="text-white font-bold">Generate Docs</div>
-                        <div className="text-slate-400 text-sm">Automated legal checklists</div>
+                        <div className="text-white font-bold text-base">Sustainability & CO2 Impact</div>
+                        <div className="text-slate-400 text-xs mt-1">Trace and optimize your transport supply chain carbon footprint dynamically based on routing and Incoterms.</div>
                       </div>
                     </div>
-                  </div>
-               </div>
-
-               {/* Quick Strategic Preview */}
-               <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 p-8 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden group">
-                  <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-4">
-                    <FileText className="text-emerald-500" size={20} />
-                    <h3 className="text-white font-bold uppercase tracking-widest text-xs">Technical Scope</h3>
-                  </div>
-                  <div className="space-y-3">
-                    <p className="text-[10px] text-slate-400 font-bold tracking-tight uppercase leading-relaxed">
-                      Deep integration with ICC Incoterms® 2020, UCP 600, and GHG Protocol standards for global compliance.
-                    </p>
                   </div>
                </div>
              </div>
-             {/* Decorative Elements */}
 
+             {/* Decorative Elements */}
              <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-[80px]" />
              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-[60px]" />
           </motion.div>

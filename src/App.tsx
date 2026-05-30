@@ -5,9 +5,10 @@ import { DECISION_TREE } from './data/incoterms';
 import ResultDisplay from './components/ResultDisplay';
 import Home from './components/Home';
 import Compare from './components/Compare';
+import ContractCompliance from './components/ContractCompliance';
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'wizard' | 'compare'>('home');
+  const [view, setView] = useState<'home' | 'wizard' | 'compare' | 'contract'>('home');
   const [currentStepId, setCurrentStepId] = useState<string>('START_ROLE');
   const [history, setHistory] = useState<string[]>([]);
   const [result, setResult] = useState<string | null>(null);
@@ -50,13 +51,18 @@ export default function App() {
     setView('compare');
   };
 
+  const startContract = () => {
+    reset();
+    setView('contract');
+  };
+
   const goHome = () => {
     setView('home');
     reset();
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-emerald-100">
+    <div className="min-h-screen bg-[#F8FAFC]/95 text-slate-900 font-sans selection:bg-emerald-100">
       {/* Navbar */}
       <nav className="bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -70,6 +76,7 @@ export default function App() {
             <button onClick={goHome} className="hover:text-emerald-600 transition-colors">Intelligence</button>
             <button onClick={startCompare} className={`hover:text-emerald-600 transition-colors ${view === 'compare' ? 'text-emerald-600' : ''}`}>Compare</button>
             <button onClick={startWizard} className={`hover:text-emerald-600 transition-colors ${view === 'wizard' ? 'text-emerald-600' : ''}`}>Analyzer</button>
+            <button onClick={startContract} className={`hover:text-emerald-600 transition-colors ${view === 'contract' ? 'text-emerald-600' : ''}`}>Contract Auditor</button>
             <a href="#standards" onClick={(e) => {
               if (view !== 'home') {
                 e.preventDefault();
@@ -100,7 +107,7 @@ export default function App() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <Home onStartWizard={startWizard} onStartCompare={startCompare} />
+              <Home onStartWizard={startWizard} onStartCompare={startCompare} onStartContract={startContract} />
             </motion.div>
           ) : view === 'compare' ? (
             <div className="max-w-7xl mx-auto px-6 py-12 md:py-20 min-h-[70vh]">
@@ -110,6 +117,16 @@ export default function App() {
                 exit={{ opacity: 0, x: -20 }}
               >
                 <Compare onReset={goHome} />
+              </motion.div>
+            </div>
+          ) : view === 'contract' ? (
+            <div className="max-w-7xl mx-auto px-6 py-12 md:py-20 min-h-[70vh]">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <ContractCompliance />
               </motion.div>
             </div>
           ) : (
